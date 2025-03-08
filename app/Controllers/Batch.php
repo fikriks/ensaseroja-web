@@ -1,0 +1,253 @@
+<?php
+
+namespace App\Controllers;
+
+use CodeIgniter\Controller;
+use App\Models\M_Produksi;
+use App\Models\M_Produk;
+use App\Libraries\MakeQRcode;
+
+class Batch extends Controller
+{
+    // Constructor untuk inisialisasi model dan library
+    public function __construct()
+    {
+        // Cek apakah session 'username' ada (pengguna sudah login)
+        if (session()->get("username") == null) {
+            // Jika tidak ada, redirect ke halaman login (base URL)
+            return redirect()->to(base_url(""));
+        }
+        
+        // Inisialisasi model M_Produksi
+        $this->models = new M_Produksi;
+        // Inisialisasi model M_Produk
+        $this->product = new M_Produk;
+    }
+
+    /**
+     * Menampilkan halaman utama data produksi.
+     * 
+     * @return void
+     */
+    public function index()
+    {
+        // Data yang akan dikirim ke view
+        $data = [
+            'judul' => 'Data Produksi', // Judul halaman
+            'batch' => $this->models->getAllData(), // Data produksi dari model M_Produksi
+            'produk' => $this->product->getAllData(), // Data produk dari model M_Produk
+            'join' => $this->models->getAllJoinTable(), // Data gabungan dari tabel terkait
+        ];
+
+        // Menampilkan view dengan template
+        echo view('templates/v_header', $data); // Header
+        echo view('templates/v_sidebar'); // Sidebar
+        echo view('templates/v_topbar'); // Topbar
+        echo view('batch/index', $data); // Konten utama
+        echo view('templates/v_footer'); // Footer
+    }
+
+    /**
+     * Mengembalikan data produk dalam format HTML berdasarkan ID.
+     * 
+     * @return void
+     */
+    public function returnJSONENC()
+    {
+        // Mengambil ID produk dari request
+        $id = $this->request->getVar("id");
+        // Mengambil data produk berdasarkan ID
+        $getData = $this->product->getDataByIdArr($id);
+        $output = "";
+
+        // Jika data ditemukan, format data ke dalam HTML
+        if ($getData != null) {
+            foreach ($getData as $items) {
+                $output .= "
+                    <div>
+                        <img src='" . base_url('foto_product/' . $items['foto']) . "' class='w-100' >
+                        <textarea class='form-control' readonly>" . $items['komposisi'] . "</textarea>
+                        <input type='text' value='" . $items['No_PIR-T'] . "' class='form-control' readonly >
+                        <input type='text' value='" . $items['produsen'] . "' class='form-control' readonly >
+                    </div>
+                ";
+            }
+        }
+        // Mengembalikan output dalam format HTML
+        echo $output;
+    }
+
+    /**
+     * Menambahkan data produksi baru.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
+    public function tambah()
+    {
+        // Cek apakah form tambah dikirim
+        if (isset($_POST['tambah'])) {
+            // Validasi input form
+            $val = $this->validate([
+                'kode' => [
+                    'label' => 'Kode Batch',
+                    'rules' => 'required|is_unique[tb_produksi.kode]|max_length[12]' // Wajib diisi, unik, dan maksimal 12 karakter
+                ],
+                'idproduk' => [
+                    'label' => 'Kode Produk',
+                    'rules' => 'required|min_length[1]|numeric', // Wajib diisi, minimal 1 karakter, dan numerik
+                    'errors' => [
+                        'numeric' => "Produk tidak boleh kosong"
+                    ]
+                ],
+                'tgl_produksi' => [
+                    'label' => "Tanggal Produksi",
+                    'rules' => "required", // Wajib diisi
+                    'errors' => [
+                        'required' => "Tanggal Produksi Tidak Boleh Kosong"
+                    ]
+                ],
+                'tgl_expire' => [
+                    'label' => "Tanggal Expire Tidak Boleh Kosong",
+                    'rules' => "required", // Wajib diisi
+                    'errors' => [
+                        'required' => "Tanggal Expire Tidak Boleh Kosong"
+                    ]
+                ]
+            ]);
+
+            // Jika validasi gagal, tampilkan pesan error
+            if ($val == false) {
+                session()->setFlashdata('err', \Config\Services::validation()->listErrors());
+                return redirect()->to(base_url('batch'));
+            } else {
+                // Inisialisasi library MakeQRcode
+                $initial_qr = new MakeQRcode();
+                // Data yang akan disimpan ke database
+                $data = [
+                    'kode' => $this->request->getPost('kode'),
+                    'id_produk' => $this->request->getPost('idproduk'),
+                    'tgl_produksi' => $this->request->getPost("tgl_produksi"),
+                    'tgl_expire' => $this->request->getPost("tgl_expire"),
+                    'qrcode' => $initial_qr->make(rand(10, 1000000) . "_", $this->request->getPost('kode'), $this->request->getPost('idproduk'), $this->request->getPost('tgl_expire'))
+                ];
+
+                // Menyimpan data ke database
+                $success = $this->models->tambah($data);
+                if ($success) {
+                    session()->setFlashdata('message', 'Ditambahkan'); // Pesan sukses
+                    return redirect()->to(base_url('batch'));
+                } else {
+                    session()->setFlashdata('err', 'Gagal Diubah'); // Pesan error
+                    return redirect()->to(base_url('batch'));
+                }
+            }
+        } else {
+            // Jika form tidak dikirim, redirect ke halaman batch
+            return redirect()->to(base_url('batch'));
+        }
+    }
+
+    /**
+     * Menghapus data produksi berdasarkan ID.
+     * 
+     * @param int $id ID data produksi
+     * @param string $file Nama file QR code yang akan dihapus
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
+    public function hapus($id = 0, $file)
+    {
+        // Menghapus data dari database
+        $success = $this->models->hapus($id);
+        if ($success) {
+            // Menghapus file QR code dari server
+            unlink("QRcode/" . $file);
+            session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
+            return redirect()->to(base_url('batch'));
+        } else {
+            session()->setFlashdata('err', 'Gagal dihapus'); // Pesan error
+            return redirect()->to(base_url('batch'));
+        }
+    }
+
+    /**
+     * Mengubah data produksi.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
+    public function ubah()
+    {
+        // Validasi input form
+        $rules = $this->validate([
+            'id' => [
+                'label' => "ID",
+                'rules' => "required", // Wajib diisi
+                'errors' => [
+                    'required' => "ID tidak valid"
+                ]
+            ],
+            'id_produk' => [
+                'label' => "ID produk",
+                'rules' => "required", // Wajib diisi
+                'errors' => [
+                    'required' => "ID produk tidak valid"
+                ]
+            ],
+            'kode' => [
+                'label' => "KODE",
+                'rules' => "required", // Wajib diisi
+                'errors' => [
+                    'required' => "KODE tidak valid"
+                ]
+            ]
+        ]);
+
+        // Jika validasi gagal, tampilkan pesan error
+        if (!$rules) {
+            session()->setFlashdata('err', \Config\Services::validation()->listErrors());
+            return redirect()->to(base_url('batch'));
+        } else {
+            // Inisialisasi library MakeQRcode
+            $initial_qr = new MakeQRcode();
+            $id_produk = $this->request->getVar('id_produk');
+            $id = $this->request->getPost('id');
+
+            // Jika QR code tidak diubah
+            if (!$this->request->getPost("qrcode")) {
+                $data = [
+                    'id_produk' => $this->request->getPost('id_produk'),
+                    'tgl_produksi' => $this->request->getPost("tgl_produksi"),
+                    'tgl_expire' => $this->request->getPost("tgl_expire"),
+                    'qrcode' => $initial_qr->make(rand(10, 1000000) . "_", $this->request->getPost('id_produk'), $this->request->getPost("tgl_produksi"), $this->request->getPost("tgl_expire"))
+                ];
+                // Update data
+                $success = $this->models->ubah($data, $id);
+                if ($success) {
+                    session()->setFlashdata('message', 'Diubah'); // Pesan sukses
+                    return redirect()->to(base_url('batch'));
+                } else {
+                    session()->setFlashdata('err', 'Gagal Diubah'); // Pesan error
+                    return redirect()->to(base_url('batch'));
+                }
+            } else {
+                // Jika QR code diubah, hapus file QR code lama
+                $image = $this->request->getPost("qrcode");
+                unlink(FCPATH . "QRcode/" . $image);
+                $data = [
+                    'id_produk' => $this->request->getPost('idproduk'),
+                    'tgl_produksi' => $this->request->getPost("tgl_produksi"),
+                    'tgl_expire' => $this->request->getPost("tgl_expire"),
+                    'qrcode' => $initial_qr->make(rand(10, 1000000) . "_", $this->request->getPost('id_produk'), $this->request->getPost("tgl_produksi"), $this->request->getPost("tgl_expire"))
+                ];
+                // Update data
+                $success = $this->models->ubah($data, $id);
+                if ($success) {
+                    session()->setFlashdata('message', 'Diubah'); // Pesan sukses
+                    return redirect()->to(base_url('batch'));
+                } else {
+                    session()->setFlashdata('err', 'Gagal Diubah'); // Pesan error
+                    return redirect()->to(base_url('batch'));
+                }
+            }
+        }
+    }
+}

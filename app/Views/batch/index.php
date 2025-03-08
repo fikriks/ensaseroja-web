@@ -1,0 +1,267 @@
+ <!-- Begin Page Content -->
+ <div class="container-fluid h-100">
+
+<!-- Page Heading -->
+<h1 class="h3 mb-4 text-gray-800"> <?= $judul; ?></h1>
+
+<?php if (session()->get('message')):?>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    Data Produksi berhasil <strong><?= session()->getFlashdata('message'); ?></strong>
+</div>
+<?php endif;?>
+
+<div class="row">
+    <div class="col-md-6">
+        <?php
+        if (session()->get('err')) {
+            echo "<div class='alert alert-danger' role='alert'>". session()->get('err') ."</div>";
+        }
+        ?>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <!--Button tiger modal-->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalTambah">
+        <i class="fa fa-plus"></i> Tambah Data
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+<table class="table table-striped">
+<thead>
+    <tr>
+        <th>No</th>
+        <th>Kode Produksi</th>
+        <th>Kode Produk</th>
+        <th>Nama Produk</th>
+        <th>Foto Produk</th>
+        <th>Komposisi</th>
+        <th>No PIR-T</th>
+        <th>Produsen</th>
+        <th>Tanggal Produksi</th>
+        <th>Tanggal Expire</th>
+        <th>QR Code</th>
+        <th>Aksi</th>
+    </tr>
+</thead>
+<tbody>
+    <?php $i=1;
+     foreach($join->getResultArray() as $key => $row){ ?>
+    <tr>
+        <td class="align-middle" scope="row"><?= $key+1; ?></td>
+        <td class="align-middle"><?= $row['kode']?></td>
+        <td class="align-middle"><?= $row['kode_produk']?></td>
+        <td class="align-middle"><?= $row['nama']?></td>
+        <td class="align-middle"><img src="<?= base_url('foto_product/').$row['foto'] ?>" width="100"></td>
+        <td class="align-middle"><?= $row['komposisi']?></td>
+        <td class="align-middle"><?= $row['no_pirt']?></td>
+        <td class="align-middle"><?= $row['produsen']?></td>
+        <td class="align-middle"><?= $row['tgl_produksi']?></td>
+        <td class="align-middle"><?= $row['tgl_expire']?></td>
+        <td class="align-middle"><a href="<?= base_url('QRcode/').$row['qrcode'] ?>" download><img src="<?= base_url('QRcode/').$row['qrcode'] ?>" alt=""></a></td>
+        <td>
+        <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdate<?= $key; ?>" id="btn-edit-batch" data-id="<?= $row['id']?>" data-kodebatch="<?= $row['kode']?>" data-idproduk="<?= $row['id_produk']?>">
+        <i class="fa fa-edit"></i></button>
+        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalHapus<?= $key ?>">
+        <i class="fa fa-trash-alt"></i>
+        </button>
+        </td>
+    </tr>
+    <div class="modal fade" id="modalUpdate<?= $key; ?>">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update <?= $judul?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="refresh()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('batch/ubah')?>" method="post">
+                <input type="hidden" name="id_produk" id="id_produk" value="<?= $row['id_produk']?> ">
+                <input type="hidden" name="id" id="id_batch" value="<?= $row['id'] ?>">
+                <div class="form-group mb-0">
+                    <label for="kode">Kode Produksi</label>
+                    <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi" value="<?= $row['kode']?>" readonly>
+                    <!-- <label for="nama">Produk</label>
+                    <input type="text" name="idproduk" id="idproduk" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['id_produk']?>"> -->
+                    <label for="inputGroupSelect01" class="mt-3">Pilih Nama Produk</label>
+                    <select class="custom-select" id="inputGroupSelect01" name="idproduk">
+                        <!-- <option selected>Pilih</option> -->
+                        
+                        <?php foreach($produk->getResultObject() as $valx){ ?>
+                            <?php if($valx->id == $row['id_produk']){ ?>
+                                <option value="<?= $valx->id ?>" id="opt-dropdown" selected><?= $valx->nama ?></option>
+                            <?php }else{ ?>
+                                <option value="<?= $valx->id ?>" id="opt-dropdown"><?= $valx->nama ?></option>
+                            <?php } ?>
+                            
+                        <?php } ?>
+                        
+                    </select>
+                    <label for="tgl_produksi">Tanggal Produksi</label>
+                    <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control" value="<?= $row['tgl_produksi'] ?>">
+                    <label for="tgl_expire">Tanggal Expire</label>
+                    <input type="date" name="tgl_expire" id="tgl_expire" class="form-control" value="<?= $row['tgl_expire'] ?>">
+                    <!-- <label for="nama">QRCode</label> -->
+                    <input type="hidden" name="qrcode" id="qrcode" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['qrcode']?>">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" name="ubah" class="btn btn-success">Update Data</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalHapus<?= $key; ?>">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hapus <?= $judul?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-0">
+                    Hapus data ini?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="<?= base_url('batch/hapus/').$row['id'].'/'.$row['qrcode'] ?>" name="hapus" class="btn btn-danger">Hapus Data</a>
+            </div>
+            </div>
+    </div>
+</div>
+    <?php } ?>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- End of Main Content -->
+
+<!--Modal box tambah data-->
+<div class="modal fade" id="modalTambah">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah <?= $judul?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('batch/tambah')?>" method="post">
+                <div class="form-group mb-0">
+                    <label for="kode">Kode Produksi</label>
+                    <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi">
+                    <label for="nama">Produk</label>
+                    <select class="custom-select" id="inputGroupSelect02" name="idproduk">
+                        <option selected>Pilih</option>
+                        <?php foreach($produk->getResultObject() as $val){ ?>
+                        <option value="<?= $val->id ?>"><?= $val->nama ?></option>
+                        <?php } ?>
+                    </select>
+                    <div id="dataDummy"></div>
+                    <label for="tgl_produksi">Tanggal Produksi</label>
+                    <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control">
+                    <label for="tgl_expire">Tanggal Expire</label>
+                    <input type="date" name="tgl_expire" id="tgl_expire" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" name="tambah" class="btn btn-success">Tambah Data</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal box hapus data-->
+<?php foreach($batch->getResultArray() as $key => $row){ ?>
+<!--<div class="modal fade" id="modalHapus<?= $key; ?>">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title">Hapus <?= $judul?></h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <div class="form-group mb-0">-->
+<!--                    Hapus data ini?-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                <a href="<?= base_url('batch/hapus/').$row['id'].'/'.$row['qrcode'] ?>" name="hapus" class="btn btn-danger">Hapus Data</a>-->
+<!--            </div>-->
+<!--            </div>-->
+<!--    </div>-->
+<!--</div>-->
+<?php } ?>
+
+<?php foreach($join->getResultArray() as $key => $row){ ?>
+<!--Modal box update data-->
+
+
+<?php } ?>
+
+<script type="text/javascript">
+    let selectP = document.getElementById("inputGroupSelect02")
+    let dummy = document.getElementById("dataDummy")
+    function refresh(){
+        location.reload()
+    }
+    
+    selectP.addEventListener("change", function(e) {
+        var url = "https://ciheri.serbacode.site/dataJSONProduct";
+        var xhr = new XMLHttpRequest();
+
+        var data = JSON.stringify({
+            id: selectP.value
+        });
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onload = function () {               
+            console.log (this.responseText);
+            dummy.innerHTML = this.responseText
+        };
+
+        xhr.send(data);
+        return false;
+    })
+    
+
+    // let btn_update = document.querySelectorAll("#btn-edit-batch")
+    // btn_update.forEach((d,n) => {
+    //     d.addEventListener("click", e => {
+    //         let attr = d.getAttribute("data-target")
+    //         let opt_modal_update = document.querySelectorAll(attr+" .modal-dialog .modal-content .modal-body form .form-group select option")
+    //         opt_modal_update.forEach((f,m) => {
+    //             if(f.value == d.getAttribute("data-id")){
+    //                 f.setAttribute("selected", "selected")
+    //             }else{
+    //                 f.removeAttribute("selected")
+    //             }
+    //         })
+    //         // console.log(modal_update)
+    //     })
+
+        
+    // })
+
+</script>
