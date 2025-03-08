@@ -56,23 +56,3 @@
 
 </ul>
 <!-- End of Sidebar --> 
-
-<!-- Custom CSS -->
-<style>
-    .sidebar-logo img {
-        max-width: 95px; /* Batasi ukuran agar tidak terlalu besar */
-        height: auto;
-    }
-
-    @media (max-width: 768px) {
-        .sidebar {
-            width: 100%;
-            position: fixed;
-            z-index: 1000;
-        }
-
-        .sidebar-logo img {
-            max-width: 60px; /* Ukuran lebih kecil untuk layar kecil */
-        }
-    }
-</style>
