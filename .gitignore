@@ -127,11 +127,11 @@ nb-configuration.xml
 
 .vscode
 
-!public/foto_product/.gitkeep
 public/foto_product/*
+!public/foto_product/.gitkeep
 
-!public/foto_profile_perusahaan/.gitkeep
 public/foto_profile_perusahaan/*
+!public/foto_profile_perusahaan/.gitkeep
 
-!public/QRcode/.gitkeep
 public/QRcode/*
+!public/QRcode/.gitkeep
