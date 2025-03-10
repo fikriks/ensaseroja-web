@@ -43,7 +43,7 @@ $routes->get('batch/hapus/(:num)/(:any)','Batch::hapus/$1/$2');
 $routes->get('produk','Produk::index');
 $routes->post('produk/ubah','Produk::ubah');
 $routes->post('produk/tambah','Produk::tambah');
-$routes->get('produk/hapus/(:num)/(:any)/(:any)','Produk::hapus/$1/$2/$3');
+$routes->get('produk/hapus/(:num)/(:any)','Produk::hapus/$1/$2');
 
 // Info
 $routes->get('info','Info::index');

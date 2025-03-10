@@ -85,7 +85,7 @@ class Produk extends Controller
                 // Proses upload file foto
                 $avatar = $this->request->getFile('file');
                 $newName = $avatar->getRandomName(); // Generate nama file acak
-                $avatar->move("foto_product", $newName); // Pindahkan file ke folder tujuan
+                $avatar->move(ROOTPATH . "public/foto_product", $newName); // Pindahkan file ke folder tujuan
 
                 // Data yang akan disimpan ke database
                 $data = [
@@ -121,9 +121,9 @@ class Produk extends Controller
      * @param string $file Nama file foto
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function hapus($id, $path_photo, $file)
+    public function hapus($id, $file)
     {
-        $rootPath = "foto_product/"; // Path folder foto
+        $rootPath = ROOTPATH . "public/foto_product/"; // Path folder foto
         $success = $this->models->hapus($id); // Menghapus data dari database
 
         // Jika penghapusan berhasil
@@ -131,9 +131,7 @@ class Produk extends Controller
             session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
 
             // Hapus file foto dan folder terkait
-            unlink($rootPath . $path_photo . "/" . $file); // Hapus file foto
-            unlink($rootPath . $path_photo . "/index.html"); // Hapus file index.html
-            rmdir($rootPath . $path_photo); // Hapus folder
+            unlink($rootPath . "/" . $file); // Hapus file foto
             return redirect()->to(base_url('produk'));
         } else {
             session()->setFlashdata('err', 'Gagal Dihapus'); // Pesan error
@@ -215,7 +213,7 @@ class Produk extends Controller
                 // Jika ada file baru yang diunggah
                 if ($avatar->getName() != "") {
                     $newName = $avatar->getRandomName(); // Generate nama file acak
-                    $avatar->move("foto_product", $newName); // Pindahkan file ke folder tujuan
+                    $avatar->move(ROOTPATH . "public/foto_product", $newName); // Pindahkan file ke folder tujuan
 
                     // Data yang akan diupdate
                     $data = [

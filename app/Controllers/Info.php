@@ -82,7 +82,7 @@ class Info extends Controller
                     // Proses upload file baru
                     $profile = $this->request->getFile('file');
                     $newName = $profile->getRandomName(); // Generate nama file acak
-                    $profile->move("foto_profile_perusahaan", $newName); // Pindahkan file ke folder tujuan
+                    $profile->move(ROOTPATH . "public/foto_profile_perusahaan", $newName); // Pindahkan file ke folder tujuan
 
                     // Data yang akan diupdate
                     $data = [
