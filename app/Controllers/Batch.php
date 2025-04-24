@@ -235,7 +235,6 @@ class Batch extends Controller
         } else {
             // Inisialisasi library MakeQRcode
             $initial_qr = new MakeQRcode();
-            $id_produk = $this->request->getVar('id_produk');
             $id = $this->request->getPost('id');
 
             // Jika QR code tidak diubah
