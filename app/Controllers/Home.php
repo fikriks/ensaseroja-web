@@ -45,28 +45,4 @@ class Home extends BaseController
         echo view('templates/v_dashboard'); // Template khusus dashboard
         echo view('templates/v_footer'); // Footer
     }
-
-    /**
-     * Menampilkan halaman informasi profil perusahaan.
-     * 
-     * @return void
-     */
-    public function Info()
-    {
-        // Inisialisasi model M_Info
-        $models = new M_Info();
-
-        // Data yang akan dikirim ke view
-        $data = [
-            'judul' => 'Profil Perusahaan', // Judul halaman
-            'info' => $models->getAllData() // Data informasi dari model M_Info
-        ];
-
-        // Menampilkan view dengan template
-        echo view('templates/v_header', $data); // Header
-        echo view('templates/v_sidebar'); // Sidebar
-        echo view('templates/v_topbar'); // Topbar
-        echo view('info/index', $data); // Konten utama informasi
-        echo view('templates/v_footer'); // Footer
-    }
 }
