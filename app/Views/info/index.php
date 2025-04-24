@@ -53,11 +53,11 @@
     <h4>Deskripsi Perusahaan</h4>
         <p><?= $row['deskripsi'] ?></p>
     </div> <br>
-    <!-- <div class="edit">
+    <div class="edit">
     <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdate" id="btn-edit-info" 
         data-id="<?= $row['id']?>" data-nama="<?= $row['nama']?>" data-foto="<?= $row['foto']?>" data-deskripsi="<?= $row['deskripsi']?>">
         <i class="fa fa-edit"></i></button>
-    </div> -->
+    </div>
     <?php } ?>
 </div>
 <!-- End of Main Content -->
