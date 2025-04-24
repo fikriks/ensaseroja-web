@@ -14,15 +14,14 @@ class MakeQRcode{
 
 	public function __construct(){}
 
-	function make($rand, $data, $tgl_produksi, $tgl_expire){
-
+	function make($rand, $data){
 		$initial = new PngWriter();
-		$imgQR = $this->encrypt($rand, $data, $tgl_produksi, $tgl_expire);
+		$imgQR = $this->encrypt($data);
 		$makeQR = QrCode::create($imgQR)->setEncoding(new Encoding("UTF-8"))->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
 				->setSize(100)->setMargin(5)->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())->setForegroundColor(new Color(0, 0, 0))
 				->setBackgroundColor(new Color(255,255,255));
 		$res = $initial->write($makeQR);
-		$filename = "QrCode_".date("Y-m-d_H-i-s").".png";
+		$filename = $rand ."QrCode_".date("Y-m-d_H-i-s").".png";
 		$res->saveToFile(ROOTPATH."public/QRcode/".$filename);
 		$data = $res->getDataUri();
 
@@ -31,14 +30,8 @@ class MakeQRcode{
 
 	}
 
-	function encrypt($rand, $plaintext, $tgl_produksi, $tgl_expire){
+	function encrypt($plaintext){
 		$AES = new Aes();
-		
-		$data = [ 
-		    "plainText" => $plaintext,
-		    "tgl_produksi" => $tgl_produksi,
-		    "tgl_expire" => $tgl_expire
-		];
 
 		$cipher = bin2hex($AES->encrypt($plaintext));
 		return $cipher;

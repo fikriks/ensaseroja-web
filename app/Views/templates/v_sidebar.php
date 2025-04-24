@@ -1,20 +1,20 @@
 <!-- Sidebar -->
-<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color:rgb(5, 50, 109)">
+<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color:rgb(0, 136, 255)">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url("home") ?>">
-        <div class="sidebar-logo">
-            <img class="img-fluid" src="<?= site_url('asset/img/logo_ensa1.png') ?>" alt="Logo Ensa Seroja">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center mb-5" href="<?= base_url("home") ?>">
+        <div class="sidebar-logo mt-5">
+            <img class="img-fluid d-block" src="<?= site_url('asset/img/logo_ensa_seroja.png') ?>" alt="Logo Ensa Seroja" width="100">
         </div>
     </a>
 
     <!-- Divider -->
-    <hr class="sidebar-divider my-0">
+    <hr class="sidebar-divider">
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
         <a class="nav-link font-weight-bold" href="<?= base_url('home')?>">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fas fa-fw fa-tachometer-alt" style="color: #EFAA41;"></i>
             <span>Dashboard</span>
         </a>
     </li>
@@ -27,22 +27,15 @@
 
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('produk')?>">
-            <i class="fas fa-box"></i>
+            <i class="fas fa-box" style="color: #EFAA41;"></i>
             <span>Data Produk</span>
         </a>
     </li>
 
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('batch')?>">
-            <i class="fas fa-barcode"></i>
+            <i class="fas fa-barcode" style="color: #EFAA41;"></i>
             <span>Data Kode Produksi</span>
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('info')?>">
-            <i class="fas fa-info-circle"></i>
-            <span>Profil Perusahaan</span>
         </a>
     </li>
 

@@ -26,7 +26,7 @@
 <div class="card">
     <div class="card-header">
         <!--Button tiger modal-->
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalTambah">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTambah">
         <i class="fa fa-plus"></i> Tambah Data
         </button>
     </div>
@@ -105,16 +105,16 @@
                         
                     </select>
                     <label for="tgl_produksi">Tanggal Produksi</label>
-                    <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control" value="<?= $row['tgl_produksi'] ?>">
+                    <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control" value="<?= $row['tgl_produksi'] ?>">
                     <label for="tgl_expire">Tanggal Expire</label>
-                    <input type="date" name="tgl_expire" id="tgl_expire" class="form-control" value="<?= $row['tgl_expire'] ?>">
+                    <input type="date" name="tgl_expire" id="tgl_expire_edit" class="form-control" value="<?= $row['tgl_expire'] ?>">
                     <!-- <label for="nama">QRCode</label> -->
                     <input type="hidden" name="qrcode" id="qrcode" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['qrcode']?>">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" name="ubah" class="btn btn-success">Update Data</button>
+                <button type="submit" name="ubah" class="btn btn-primary">Update Data</button>
                 </form>
             </div>
         </div>
@@ -163,25 +163,25 @@
             <div class="modal-body">
                 <form action="<?= base_url('batch/tambah')?>" method="post">
                 <div class="form-group mb-0">
-                    <label for="kode">Kode Produksi</label>
-                    <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi">
-                    <label for="nama">Produk</label>
+                     <label for="jml_produksi">Jumlah Produksi <span class="text-danger">*</span></label>
+                    <input type="number" name="jml_produksi" id="jml_produksi" class="form-control" placeholder="Jumlah produksi">
+                    <label for="nama">Produk <span class="text-danger">*</span></label>
                     <select class="custom-select" id="inputGroupSelect02" name="idproduk">
-                        <option selected>Pilih</option>
+                        <option selected disabled>Pilih</option>
                         <?php foreach($produk->getResultObject() as $val){ ?>
                         <option value="<?= $val->id ?>"><?= $val->nama ?></option>
                         <?php } ?>
                     </select>
                     <div id="dataDummy"></div>
-                    <label for="tgl_produksi">Tanggal Produksi</label>
-                    <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control">
-                    <label for="tgl_expire">Tanggal Expire</label>
+                    <label for="tgl_produksi">Tanggal Produksi <span class="text-danger">*</span></label>
+                    <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control" value="<?= date('Y-m-d') ?>">
+                    <label for="tgl_expire">Tanggal Expire <span class="text-danger">*</span></label>
                     <input type="date" name="tgl_expire" id="tgl_expire" class="form-control">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" name="tambah" class="btn btn-success">Tambah Data</button>
+                <button type="submit" name="tambah" class="btn btn-primary">Tambah Data</button>
                 </form>
             </div>
         </div>
@@ -219,49 +219,37 @@
 
 <?php } ?>
 
-<script type="text/javascript">
+<?= $this->section('js') ?>
+<script>
     let selectP = document.getElementById("inputGroupSelect02")
     let dummy = document.getElementById("dataDummy")
+    
     function refresh(){
         location.reload()
     }
-    
-    selectP.addEventListener("change", function(e) {
-        var url = "https://ciheri.serbacode.site/dataJSONProduct";
-        var xhr = new XMLHttpRequest();
 
-        var data = JSON.stringify({
-            id: selectP.value
-        });
+    function setExpireDate() {
+        let produksi = $('#tgl_produksi').val();
+        if (produksi) {
+            let produksiDate = new Date(produksi);
+            produksiDate.setMonth(produksiDate.getMonth() + 3);
 
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.onload = function () {               
-            console.log (this.responseText);
-            dummy.innerHTML = this.responseText
-        };
+            // Handle jika bulan lebih dari Desember
+            let year = produksiDate.getFullYear();
+            let month = (produksiDate.getMonth() + 1).toString().padStart(2, '0');
+            let day = produksiDate.getDate().toString().padStart(2, '0');
 
-        xhr.send(data);
-        return false;
-    })
-    
+            let expireFormatted = `${year}-${month}-${day}`;
+            $('#tgl_expire').val(expireFormatted);
+        }
+    }
 
-    // let btn_update = document.querySelectorAll("#btn-edit-batch")
-    // btn_update.forEach((d,n) => {
-    //     d.addEventListener("click", e => {
-    //         let attr = d.getAttribute("data-target")
-    //         let opt_modal_update = document.querySelectorAll(attr+" .modal-dialog .modal-content .modal-body form .form-group select option")
-    //         opt_modal_update.forEach((f,m) => {
-    //             if(f.value == d.getAttribute("data-id")){
-    //                 f.setAttribute("selected", "selected")
-    //             }else{
-    //                 f.removeAttribute("selected")
-    //             }
-    //         })
-    //         // console.log(modal_update)
-    //     })
+    // Saat halaman pertama kali load
+    setExpireDate();
 
-        
-    // })
-
+    // Saat tanggal produksi diubah
+    $('#tgl_produksi').on('change', function() {
+        setExpireDate();
+    });
 </script>
+<?= $this->endSection() ?>

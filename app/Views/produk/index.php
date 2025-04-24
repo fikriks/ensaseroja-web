@@ -11,7 +11,7 @@
     }
 
     .form-input-file:hover{
-        background: #5cbd95;
+        background: #60B5FF;
         color: #fff;
     }
 
@@ -52,7 +52,7 @@
 <div class="card">
     <div class="card-header">
         <!--Button tiger modal-->
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalTambah">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTambah">
         <i class="fa fa-plus"></i> Tambah Data
         </button>
     </div>
@@ -67,7 +67,7 @@
                         <th>Komposisi</th>
                         <th>No PIR-T</th>
                         <th>Produsen</th>
-                        <th colspan="2">Aksi</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,7 +76,7 @@
                         <tr>
                             <td class="align-middle"><?= $row['kode_produk']?></td>
                             <td class="align-middle"><?= $row['nama']?></td>
-                            <td class="align-middle"><img src="<?= base_url('foto_product/').$row['foto'] ?>?>" alt="Foto Product" class="w-100"></td>
+                            <td class="align-middle"><img src="<?= base_url('foto_product/').$row['foto'] ?>?>" alt="Foto Product" width="100"></td>
                             <td class="align-middle"><?= $row['komposisi']?></td>
                             <td class="align-middle"><?= $row['no_pirt']?></td>
                             <td class="align-middle"><?= $row['produsen']?></td>
@@ -95,7 +95,9 @@
             </table>
         </div>
     </div>
-<!-- /.container-fluid -->
+</div>
+</div>
+    <!-- /.container-fluid -->
 <!-- End of Main Content -->
 
 
@@ -112,28 +114,28 @@
             <div class="modal-body">
                 <form action="<?= base_url('produk/tambah') ?>" method="post" enctype="multipart/form-data">
                 <div class="form-group mb-0">
-                    <label for="kode">Kode Produk</label>
-                    <input type="number" name="kode" id="kode" class="form-control" placeholder="Masukkan kode produk">
-                    <label for="nama">Nama Produk</label>
+                    <label for="kode">Kode Produk <span class="text-danger">*</span></label>
+                    <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode produk" required>
+                    <label for="nama">Nama Produk <span class="text-danger">*</span></label>
                     <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama produk">
-                    <label for="photoProduk">Foto Produk</label>
+                    <label for="photoProduk">Foto Produk <span class="text-danger">*</span></label>
                     <br>
                     <label class="form-input-file">
                         <input type="file" name="file" id="filesProduk" placeholder="Masukkan nama produk">
                         <span>Pilih Foto Produk</span>
                     </label>
                     <br>
-                    <label for="khas">Komposisi</label>
+                    <label for="khas">Komposisi <span class="text-danger">*</span></label>
                     <input type="text" name="komposisi" id="khas" class="form-control" placeholder="Masukkan komposisi produk">
-                    <label for="No_PIR-T">No PIR-T</label>
+                    <label for="No_PIR-T">No PIR-T <span class="text-danger">*</span></label>
                     <input type="text" name="No_PIR-T" id="ijin" class="form-control" placeholder="Masukkan PIRT produk">
-                    <label for="pro">Produsen</label>
+                    <label for="pro">Produsen <span class="text-danger">*</span></label>
                     <input type="text" name="prod" id="prod" class="form-control" placeholder="Masukkan produsen produk">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" name="tambah" class="btn btn-success">Tambah Data</button>
+                <button type="submit" name="tambah" class="btn btn-primary">Tambah Data</button>
                 </form>
             </div>
             </div>
@@ -181,9 +183,9 @@
                 <form action="<?= base_url('produk/ubah')?>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="id" id="id-produk">
                 <div class="form-group mb-0">
-                    <label for="kode">Kode Produk</label>
-                    <input type="number" name="kode" id="kode" class="form-control" placeholder="Masukkan kode produk" value="<?= $row['kode_produk']?>">
-                    <label for="nama">Nama Produk</label>
+                    <label for="kode">Kode Produk <span class="text-danger">*</span></label>
+                    <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode produk" value="<?= $row['kode_produk']?>">
+                    <label for="nama">Nama Produk <span class="text-danger">*</span></label>
                     <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['nama']?>">
                     <!--<label for="nama">Foto Produk</label>-->
                     <!--<input type="file" name="file" id="file" class="form-control" placeholder="Masukkan Foto produk" value="<?= base_url('foto_product/'.$row['foto']) ?>">-->
@@ -194,17 +196,17 @@
                         <span>Pilih Foto Produk</span>
                     </label>
                     <br>
-                    <label for="komposisi">Komposisi</label>
+                    <label for="komposisi">Komposisi <span class="text-danger">*</span></label>
                     <input type="text" name="komposisi" id="komposisi" class="form-control" placeholder="Masukkan khasiat produk" value="<?= $row['komposisi']?>">
-                    <label for="No_PIR-T">No PIR-T</label>
+                    <label for="No_PIR-T">No PIR-T <span class="text-danger">*</span></label>
                     <input type="text" name="No_PIR-T" id="No_PIR-T" class="form-control" placeholder="Masukkan ijin edar produk" value="<?= $row['no_pirt']?>">
-                    <label for="pro">Produsen</label>
+                    <label for="pro">Produsen <span class="text-danger">*</span></label>
                     <input type="text" name="prod" id="prod" class="form-control" placeholder="Masukkan produsen produk" value="<?= $row['produsen']?>">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" name="ubah" class="btn btn-success">Update Data</button>
+                <button type="submit" name="ubah" class="btn btn-primary">Update Data</button>
                 </form>
             </div>
             </div>

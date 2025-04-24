@@ -88,10 +88,6 @@ class Batch extends Controller
         if (isset($_POST['tambah'])) {
             // Validasi input form
             $val = $this->validate([
-                'kode' => [
-                    'label' => 'Kode Batch',
-                    'rules' => 'required|is_unique[tb_produksi.kode]|max_length[12]' // Wajib diisi, unik, dan maksimal 12 karakter
-                ],
                 'idproduk' => [
                     'label' => 'Kode Produk',
                     'rules' => 'required|min_length[1]|numeric', // Wajib diisi, minimal 1 karakter, dan numerik
@@ -112,6 +108,13 @@ class Batch extends Controller
                     'errors' => [
                         'required' => "Tanggal Expire Tidak Boleh Kosong"
                     ]
+                ],
+                'jml_produksi' => [
+                    'label' => "Jumlah produksi Tidak Boleh Kosong",
+                    'rules' => "required", // Wajib diisi
+                    'errors' => [
+                        'required' => "Jumlah produksi Tidak Boleh Kosong"
+                    ]
                 ]
             ]);
 
@@ -122,17 +125,41 @@ class Batch extends Controller
             } else {
                 // Inisialisasi library MakeQRcode
                 $initial_qr = new MakeQRcode();
-                // Data yang akan disimpan ke database
-                $data = [
-                    'kode' => $this->request->getPost('kode'),
-                    'id_produk' => $this->request->getPost('idproduk'),
-                    'tgl_produksi' => $this->request->getPost("tgl_produksi"),
-                    'tgl_expire' => $this->request->getPost("tgl_expire"),
-                    'qrcode' => $initial_qr->make(rand(10, 1000000) . "_", $this->request->getPost('kode'), $this->request->getPost('idproduk'), $this->request->getPost('tgl_expire'))
-                ];
 
-                // Menyimpan data ke database
-                $success = $this->models->tambah($data);
+                $idProduk = $this->request->getPost('idproduk');
+                $produk = $this->product->getDataById($idProduk);
+                $tglProduksi = date('ymd', strtotime($this->request->getPost("tgl_produksi")));
+
+                 // Get the last sequence number for this product and date
+                 $lastBatch = $this->models->where('id_produk', $idProduk)
+                 ->where('DATE(tgl_produksi)', $this->request->getPost("tgl_produksi"))
+                 ->orderBy('kode', 'DESC')
+                 ->get()->getRowArray();
+                
+                // Set starting sequence number
+                $startSeq = 1;
+                if ($lastBatch) {
+                    // Extract the last sequence number from the code
+                    $lastSeq = intval(substr($lastBatch['kode'], -3));
+                    $startSeq = $lastSeq + 1;
+                }
+
+                for($i=0; $i < intval($this->request->getPost('jml_produksi')); $i++){
+                    $kode = $produk['kode_produk'] . $tglProduksi . sprintf('%03d', $startSeq + $i);
+
+                    // Data yang akan disimpan ke database
+                    $data = [
+                        'kode' => $kode,
+                        'id_produk' => $this->request->getPost('idproduk'),
+                        'tgl_produksi' => $this->request->getPost("tgl_produksi"),
+                        'tgl_expire' => $this->request->getPost("tgl_expire"),
+                        'qrcode' => $initial_qr->make(rand(10, 10000000) . "_", $kode)
+                    ];       
+
+                    // Menyimpan data ke database
+                    $success = $this->models->tambah($data);
+                }
+
                 if ($success) {
                     session()->setFlashdata('message', 'Ditambahkan'); // Pesan sukses
                     return redirect()->to(base_url('batch'));
@@ -154,7 +181,7 @@ class Batch extends Controller
      * @param string $file Nama file QR code yang akan dihapus
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function hapus($id = 0, $file)
+    public function hapus($id = 0, $file = null)
     {
         // Menghapus data dari database
         $success = $this->models->hapus($id);
