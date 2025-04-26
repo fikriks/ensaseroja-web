@@ -160,7 +160,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="<?= base_url('produk/hapus/').$row['id'].'/'.$row['foto'] ?>" name="hapus" class="btn btn-danger">Hapus Data</a>
+                <a href="<?= base_url('produk/hapus/'.$row['id'].'/'.$row['foto']) ?>" name="hapus" class="btn btn-danger">Hapus Data</a>
             </div>
             </div>
     </div>
