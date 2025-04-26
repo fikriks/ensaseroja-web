@@ -1,7 +1,7 @@
  <?= $this->extend('templates/admin') ?>
 
  <?= $this->section('title') ?>
- Dashboard
+ Data Kode Produksi
  <?= $this->endSection() ?>
 
  <?= $this->section('content') ?>

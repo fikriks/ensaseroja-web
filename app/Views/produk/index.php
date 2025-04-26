@@ -1,7 +1,7 @@
  <?= $this->extend('templates/admin') ?>
 
  <?= $this->section('title') ?>
- Dashboard
+ Data Produk
  <?= $this->endSection() ?>
 
  <?= $this->section('css') ?>
@@ -38,7 +38,7 @@
  <div class="container-fluid h-100">
 
      <!-- Page Heading -->
-     <h1 class="h3 mb-4 text-gray-800"> <?= $this->renderSection('title'); ?></h1>
+     <h1 class="h3 mb-4 text-gray-800"> Data Produk</h1>
 
      <?php if (session()->get('message')): ?>
          <div class="alert alert-success alert-dismissible fade show" role="alert">
