@@ -121,17 +121,25 @@ class Produk extends Controller
      * @param string $file Nama file foto
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function hapus($id, $file)
+    public function hapus($id = 0)
     {
         $rootPath = ROOTPATH . "public/foto_product/"; // Path folder foto
-        $success = $this->models->hapus($id); // Menghapus data dari database
 
-        // Jika penghapusan berhasil
-        if ($success) {
-            session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
+        $produk = $this->models->getDataById($id);
 
+        if($produk){
             // Hapus file foto dan folder terkait
-            unlink($rootPath . "/" . $file); // Hapus file foto
+            unlink($rootPath . "/" . $produk['foto']); // Hapus file foto
+
+            $hapus = $this->models->hapus($id);
+            if($hapus){
+                session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
+                return redirect()->to(base_url('produk'));
+            } else {
+                session()->setFlashdata('err', 'Gagal Dihapus'); // Pesan error
+                return redirect()->to(base_url('produk'));
+            }
+
             return redirect()->to(base_url('produk'));
         } else {
             session()->setFlashdata('err', 'Gagal Dihapus'); // Pesan error

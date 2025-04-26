@@ -137,7 +137,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="<?= base_url('batch/hapus/').$row['id'].'/'.$row['qrcode'] ?>" name="hapus" class="btn btn-danger">Hapus Data</a>
+                <a href="<?= base_url('batch/hapus/'.$row['id']) ?>" name="hapus" class="btn btn-danger">Hapus Data</a>
             </div>
             </div>
     </div>
@@ -187,37 +187,6 @@
         </div>
     </div>
 </div>
-
-<!--Modal box hapus data-->
-<?php foreach($batch->getResultArray() as $key => $row){ ?>
-<!--<div class="modal fade" id="modalHapus<?= $key; ?>">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title">Hapus <?= $judul?></h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <div class="form-group mb-0">-->
-<!--                    Hapus data ini?-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-<!--                <a href="<?= base_url('batch/hapus/').$row['id'].'/'.$row['qrcode'] ?>" name="hapus" class="btn btn-danger">Hapus Data</a>-->
-<!--            </div>-->
-<!--            </div>-->
-<!--    </div>-->
-<!--</div>-->
-<?php } ?>
-
-<?php foreach($join->getResultArray() as $key => $row){ ?>
-<!--Modal box update data-->
-
-
-<?php } ?>
 
 <?= $this->section('js') ?>
 <script>

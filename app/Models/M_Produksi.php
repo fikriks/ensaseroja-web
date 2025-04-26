@@ -34,7 +34,7 @@ class M_Produksi extends Model{
      */
     public function getDataById($id)
     {
-        $this->builder_produk->where('id', $id);
+        $this->builder->where('id', $id);
         return $this->builder->get()->getRowArray();
     }
 

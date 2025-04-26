@@ -37,13 +37,13 @@ $routes->get('home', 'Home::index');
 $routes->get('batch','Batch::index');
 $routes->post('batch/ubah','Batch::ubah');
 $routes->post('batch/tambah','Batch::tambah');
-$routes->get('batch/hapus/(:num)/(:any)','Batch::hapus/$1/$2');
+$routes->get('batch/hapus/(:num)','Batch::hapus/$1');
 
 // Produk
 $routes->get('produk','Produk::index');
 $routes->post('produk/ubah','Produk::ubah');
 $routes->post('produk/tambah','Produk::tambah');
-$routes->get('produk/hapus/(:num)/(:any)','Produk::hapus/$1/$2');
+$routes->get('produk/hapus/(:num)','Produk::hapus/$1');
 
 // Info
 $routes->get('info','Info::index');

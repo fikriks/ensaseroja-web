@@ -181,15 +181,22 @@ class Batch extends Controller
      * @param string $file Nama file QR code yang akan dihapus
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function hapus($id = 0, $file = null)
+    public function hapus($id = 0)
     {
-        // Menghapus data dari database
-        $success = $this->models->hapus($id);
-        if ($success) {
-            // Menghapus file QR code dari server
-            unlink("QRcode/" . $file);
-            session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
-            return redirect()->to(base_url('batch'));
+        $produksi = $this->models->getDataById($id);
+
+        if($produksi){
+            unlink("QRcode/" . $produksi['qrcode']);
+
+            $hapus = $this->models->hapus($id);
+
+            if($hapus){
+                session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
+                return redirect()->to(base_url('batch'));
+            } else {
+                session()->setFlashdata('err', 'Gagal dihapus'); // Pesan error
+                return redirect()->to(base_url('batch'));
+            }
         } else {
             session()->setFlashdata('err', 'Gagal dihapus'); // Pesan error
             return redirect()->to(base_url('batch'));
