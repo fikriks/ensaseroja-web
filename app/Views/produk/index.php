@@ -1,3 +1,10 @@
+ <?= $this->extend('templates/admin') ?>
+
+ <?= $this->section('title') ?>
+ Dashboard
+ <?= $this->endSection() ?>
+
+ <?= $this->section('css') ?>
  <style type="text/css">
      .form-input-file {
          cursor: pointer;
@@ -11,7 +18,7 @@
      }
 
      .form-input-file:hover {
-         background: #60B5FF;
+         background: #EFAA41;
          color: #fff;
      }
 
@@ -24,11 +31,14 @@
          top: -1000px;
      }
  </style>
+ <?= $this->endSection() ?>
+
+ <?= $this->section('content') ?>
  <!-- Begin Page Content -->
  <div class="container-fluid h-100">
 
      <!-- Page Heading -->
-     <h1 class="h3 mb-4 text-gray-800"> <?= $judul; ?></h1>
+     <h1 class="h3 mb-4 text-gray-800"> <?= $this->renderSection('title'); ?></h1>
 
      <?php if (session()->get('message')): ?>
          <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -106,7 +116,7 @@
      <div class="modal-dialog" role="document">
          <div class="modal-content">
              <div class="modal-header">
-                 <h5 class="modal-title">Tambah <?= $judul ?></h5>
+                 <h5 class="modal-title">Tambah Produk</h5>
                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                      <span aria-hidden="true">&times;</span>
                  </button>
@@ -148,7 +158,7 @@
          <div class="modal-dialog" role="document">
              <div class="modal-content">
                  <div class="modal-header">
-                     <h5 class="modal-title">Hapus <?= $judul ?></h5>
+                     <h5 class="modal-title">Hapus Produk</h5>
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
@@ -174,7 +184,7 @@
          <div class="modal-dialog" role="document">
              <div class="modal-content">
                  <div class="modal-header">
-                     <h5 class="modal-title">Update <?= $judul ?></h5>
+                     <h5 class="modal-title">Update Produk</h5>
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
@@ -213,3 +223,4 @@
          </div>
      </div>
  <?php } ?>
+ <?= $this->endSection() ?>

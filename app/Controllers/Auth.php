@@ -19,7 +19,7 @@ class Auth extends BaseController
         ];
 
         // Menampilkan view 'auth/index' dengan data yang telah disiapkan
-        echo view('auth/index', $data);
+        return view('auth/index', $data);
     }
 
     /**

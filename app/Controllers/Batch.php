@@ -33,18 +33,13 @@ class Batch extends Controller
     {
         // Data yang akan dikirim ke view
         $data = [
-            'judul' => 'Data Produksi', // Judul halaman
             'batch' => $this->models->getAllData(), // Data produksi dari model M_Produksi
             'produk' => $this->product->getAllData(), // Data produk dari model M_Produk
             'join' => $this->models->getAllJoinTable(), // Data gabungan dari tabel terkait
         ];
 
         // Menampilkan view dengan template
-        echo view('templates/v_header', $data); // Header
-        echo view('templates/v_sidebar'); // Sidebar
-        echo view('templates/v_topbar'); // Topbar
-        echo view('batch/index', $data); // Konten utama
-        echo view('templates/v_footer'); // Footer
+        return view('batch/index', $data); // Konten utama
     }
 
     /**
@@ -178,29 +173,30 @@ class Batch extends Controller
      * Menghapus data produksi berdasarkan ID.
      * 
      * @param int $id ID data produksi
-     * @param string $file Nama file QR code yang akan dihapus
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function hapus($id = 0)
     {
         $produksi = $this->models->getDataById($id);
 
-        if ($produksi) {
-            unlink("QRcode/" . $produksi['qrcode']);
-
-            $hapus = $this->models->hapus($id);
-
-            if ($hapus) {
-                session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
-                return redirect()->to(base_url('batch'));
-            } else {
-                session()->setFlashdata('err', 'Gagal dihapus'); // Pesan error
-                return redirect()->to(base_url('batch'));
-            }
-        } else {
-            session()->setFlashdata('err', 'Gagal dihapus'); // Pesan error
+        if (!$produksi) {
+            session()->setFlashdata('err', 'Gagal dihapus');
             return redirect()->to(base_url('batch'));
         }
+
+        $qrPath = "QRcode/" . $produksi['qrcode'];
+        if (is_file($qrPath)) {
+            unlink($qrPath);
+        }
+
+        $hapus = $this->models->hapus($id);
+
+        if ($hapus) {
+            session()->setFlashdata('message', 'Dihapus');
+        } else {
+            session()->setFlashdata('err', 'Gagal dihapus');
+        }
+        return redirect()->to(base_url('batch'));
     }
 
     /**

@@ -38,11 +38,6 @@ class Home extends BaseController
         ];
 
         // Menampilkan view dengan template
-        echo view('templates/v_header', $data); // Header
-        echo view('templates/v_sidebar'); // Sidebar
-        echo view('templates/v_topbar'); // Topbar
-        echo view('home/index'); // Konten utama dashboard
-        echo view('templates/v_dashboard'); // Template khusus dashboard
-        echo view('templates/v_footer'); // Footer
+        return view('dashboard/index', $data);
     }
 }

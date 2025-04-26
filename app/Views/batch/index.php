@@ -1,8 +1,15 @@
+ <?= $this->extend('templates/admin') ?>
+
+ <?= $this->section('title') ?>
+ Dashboard
+ <?= $this->endSection() ?>
+
+ <?= $this->section('content') ?>
  <!-- Begin Page Content -->
  <div class="container-fluid h-100">
 
      <!-- Page Heading -->
-     <h1 class="h3 mb-4 text-gray-800"> <?= $judul; ?></h1>
+     <h1 class="h3 mb-4 text-gray-800"> Kode Produksi</h1>
 
      <?php if (session()->get('message')): ?>
          <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -76,7 +83,7 @@
                                  <div class="modal-dialog" role="document">
                                      <div class="modal-content">
                                          <div class="modal-header">
-                                             <h5 class="modal-title">Update <?= $judul ?></h5>
+                                             <h5 class="modal-title">Update Kode Produksi</h5>
                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="refresh()">
                                                  <span aria-hidden="true">&times;</span>
                                              </button>
@@ -88,22 +95,6 @@
                                                  <div class="form-group mb-0">
                                                      <label for="kode">Kode Produksi</label>
                                                      <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi" value="<?= $row['kode'] ?>" readonly>
-                                                     <!-- <label for="nama">Produk</label>
-                    <input type="text" name="idproduk" id="idproduk" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['id_produk'] ?>"> -->
-                                                     <label for="inputGroupSelect01" class="mt-3">Pilih Nama Produk</label>
-                                                     <select class="custom-select" id="inputGroupSelect01" name="idproduk">
-                                                         <!-- <option selected>Pilih</option> -->
-
-                                                         <?php foreach ($produk->getResultObject() as $valx) { ?>
-                                                             <?php if ($valx->id == $row['id_produk']) { ?>
-                                                                 <option value="<?= $valx->id ?>" id="opt-dropdown" selected><?= $valx->nama ?></option>
-                                                             <?php } else { ?>
-                                                                 <option value="<?= $valx->id ?>" id="opt-dropdown"><?= $valx->nama ?></option>
-                                                             <?php } ?>
-
-                                                         <?php } ?>
-
-                                                     </select>
                                                      <label for="tgl_produksi">Tanggal Produksi</label>
                                                      <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control" value="<?= $row['tgl_produksi'] ?>">
                                                      <label for="tgl_expire">Tanggal Expire</label>
@@ -125,7 +116,7 @@
                                  <div class="modal-dialog" role="document">
                                      <div class="modal-content">
                                          <div class="modal-header">
-                                             <h5 class="modal-title">Hapus <?= $judul ?></h5>
+                                             <h5 class="modal-title">Hapus Kode Produksi</h5>
                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                  <span aria-hidden="true">&times;</span>
                                              </button>
@@ -154,7 +145,7 @@
              <div class="modal-dialog" role="document">
                  <div class="modal-content">
                      <div class="modal-header">
-                         <h5 class="modal-title">Tambah <?= $judul ?></h5>
+                         <h5 class="modal-title">Tambah Kode Produksi</h5>
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                              <span aria-hidden="true">&times;</span>
                          </button>
@@ -186,38 +177,41 @@
                  </div>
              </div>
          </div>
+     </div>
+ </div>
+ <?= $this->endSection() ?>
 
-         <?= $this->section('js') ?>
-         <script>
-             let selectP = document.getElementById("inputGroupSelect02")
-             let dummy = document.getElementById("dataDummy")
+ <?= $this->section('js') ?>
+ <script>
+     let selectP = document.getElementById("inputGroupSelect02")
+     let dummy = document.getElementById("dataDummy")
 
-             function refresh() {
-                 location.reload()
-             }
+     function refresh() {
+         location.reload()
+     }
 
-             function setExpireDate() {
-                 let produksi = $('#tgl_produksi').val();
-                 if (produksi) {
-                     let produksiDate = new Date(produksi);
-                     produksiDate.setMonth(produksiDate.getMonth() + 3);
+     function setExpireDate() {
+         let produksi = $('#tgl_produksi').val();
+         if (produksi) {
+             let produksiDate = new Date(produksi);
+             produksiDate.setMonth(produksiDate.getMonth() + 3);
 
-                     // Handle jika bulan lebih dari Desember
-                     let year = produksiDate.getFullYear();
-                     let month = (produksiDate.getMonth() + 1).toString().padStart(2, '0');
-                     let day = produksiDate.getDate().toString().padStart(2, '0');
+             // Handle jika bulan lebih dari Desember
+             let year = produksiDate.getFullYear();
+             let month = (produksiDate.getMonth() + 1).toString().padStart(2, '0');
+             let day = produksiDate.getDate().toString().padStart(2, '0');
 
-                     let expireFormatted = `${year}-${month}-${day}`;
-                     $('#tgl_expire').val(expireFormatted);
-                 }
-             }
+             let expireFormatted = `${year}-${month}-${day}`;
+             $('#tgl_expire').val(expireFormatted);
+         }
+     }
 
-             // Saat halaman pertama kali load
-             setExpireDate();
+     // Saat halaman pertama kali load
+     setExpireDate();
 
-             // Saat tanggal produksi diubah
-             $('#tgl_produksi').on('change', function() {
-                 setExpireDate();
-             });
-         </script>
-         <?= $this->endSection() ?>
+     // Saat tanggal produksi diubah
+     $('#tgl_produksi').on('change', function() {
+         setExpireDate();
+     });
+ </script>
+ <?= $this->endSection() ?>

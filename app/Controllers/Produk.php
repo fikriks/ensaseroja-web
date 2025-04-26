@@ -29,16 +29,11 @@ class Produk extends Controller
     {
         // Data yang akan dikirim ke view
         $data = [
-            'judul' => 'Data Produk', // Judul halaman
             'produk' => $this->models->getAllData() // Data produk dari model M_Produk
         ];
 
         // Menampilkan view dengan template
-        echo view('templates/v_header', $data); // Header
-        echo view('templates/v_sidebar'); // Sidebar
-        echo view('templates/v_topbar'); // Topbar
-        echo view('produk/index', $data); // Konten utama data produk
-        echo view('templates/v_footer'); // Footer
+        return view('produk/index', $data); // Konten utama data produk
     }
 
     /**
@@ -127,24 +122,24 @@ class Produk extends Controller
 
         $produk = $this->models->getDataById($id);
 
-        if ($produk) {
-            // Hapus file foto dan folder terkait
-            unlink($rootPath . "/" . $produk['foto']); // Hapus file foto
-
-            $hapus = $this->models->hapus($id);
-            if ($hapus) {
-                session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
-                return redirect()->to(base_url('produk'));
-            } else {
-                session()->setFlashdata('err', 'Gagal Dihapus'); // Pesan error
-                return redirect()->to(base_url('produk'));
-            }
-
-            return redirect()->to(base_url('produk'));
-        } else {
-            session()->setFlashdata('err', 'Gagal Dihapus'); // Pesan error
+        if (!$produk) {
+            session()->setFlashdata('err', 'Gagal Dihapus');
             return redirect()->to(base_url('produk'));
         }
+
+        $fotoPath = $rootPath . "/" . $produk['foto'];
+        if (is_file($fotoPath)) {
+            unlink($fotoPath);
+        }
+
+        $hapus = $this->models->hapus($id);
+
+        if ($hapus) {
+            session()->setFlashdata('message', 'Dihapus');
+        } else {
+            session()->setFlashdata('err', 'Gagal Dihapus');
+        }
+        return redirect()->to(base_url('produk'));
     }
 
     /**
