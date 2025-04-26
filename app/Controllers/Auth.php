@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Controllers;
 
@@ -17,7 +17,7 @@ class Auth extends BaseController
         $data = [
             'judul' => "Login sistem" // Judul halaman login
         ];
-        
+
         // Menampilkan view 'auth/index' dengan data yang telah disiapkan
         echo view('auth/index', $data);
     }
@@ -45,7 +45,7 @@ class Auth extends BaseController
         if ($val) {
             // Membuat instance dari model M_Auth
             $this->auth = new M_Auth();
-            
+
             // Mengambil data input dari form
             $username = $this->request->getVar("username"); // Mengambil username
             $passw = $this->request->getVar("password"); // Mengambil password
@@ -74,7 +74,7 @@ class Auth extends BaseController
     {
         // Menghancurkan session (logout)
         session()->destroy();
-        
+
         // Redirect ke halaman login setelah logout
         return redirect()->to(base_url());
     }

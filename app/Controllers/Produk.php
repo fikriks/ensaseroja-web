@@ -127,12 +127,12 @@ class Produk extends Controller
 
         $produk = $this->models->getDataById($id);
 
-        if($produk){
+        if ($produk) {
             // Hapus file foto dan folder terkait
             unlink($rootPath . "/" . $produk['foto']); // Hapus file foto
 
             $hapus = $this->models->hapus($id);
-            if($hapus){
+            if ($hapus) {
                 session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
                 return redirect()->to(base_url('produk'));
             } else {

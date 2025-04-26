@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link font-weight-bold" href="<?= base_url('home')?>">
+        <a class="nav-link font-weight-bold" href="<?= base_url('home') ?>">
             <i class="fas fa-fw fa-tachometer-alt" style="color: #EFAA41;"></i>
             <span>Dashboard</span>
         </a>
@@ -26,14 +26,14 @@
     <div class="sidebar-heading">Menu</div>
 
     <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('produk')?>">
+        <a class="nav-link" href="<?= base_url('produk') ?>">
             <i class="fas fa-box" style="color: #EFAA41;"></i>
             <span>Data Produk</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('batch')?>">
+        <a class="nav-link" href="<?= base_url('batch') ?>">
             <i class="fas fa-barcode" style="color: #EFAA41;"></i>
             <span>Data Kode Produksi</span>
         </a>
@@ -48,4 +48,4 @@
     </div>
 
 </ul>
-<!-- End of Sidebar --> 
+<!-- End of Sidebar -->

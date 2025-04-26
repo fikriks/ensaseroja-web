@@ -4,18 +4,19 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class M_Produk extends Model{
+class M_Produk extends Model
+{
     // Nama tabel utama untuk produk
-    protected $table='tb_produk';
+    protected $table = 'tb_produk';
     // Nama tabel batch produksi
-    protected $table_bacth='tb_produksi';
+    protected $table_bacth = 'tb_produksi';
 
     // Konstruktor untuk inisialisasi koneksi database
     public function __construct() //memanggil koneksi
     {
-       $this->db = db_connect(); // Membuat koneksi database
-       $this->builder = $this->db->table($this->table); // Query builder untuk tabel produk
-       $this->builder_batch = $this->db->table($this->table_bacth); // Query builder untuk tabel produksi
+        $this->db = db_connect(); // Membuat koneksi database
+        $this->builder = $this->db->table($this->table); // Query builder untuk tabel produk
+        $this->builder_batch = $this->db->table($this->table_bacth); // Query builder untuk tabel produksi
     }
 
     /**
@@ -45,7 +46,7 @@ class M_Produk extends Model{
      */
     public function tambah($data)
     {
-       return $this->builder->insert($data);
+        return $this->builder->insert($data);
     }
 
     /**
@@ -55,7 +56,7 @@ class M_Produk extends Model{
      */
     public function hapus($id)
     {
-       return $this->builder->delete(['id' => $id]);
+        return $this->builder->delete(['id' => $id]);
     }
 
     /**
@@ -66,7 +67,7 @@ class M_Produk extends Model{
      */
     public function ubah($data, $id)
     {
-        return $this->builder->update($data,['id'=>$id]);
+        return $this->builder->update($data, ['id' => $id]);
     }
 
     /**
@@ -79,29 +80,30 @@ class M_Produk extends Model{
         // *Pake yg ini ya*
         // return $this->builder_batch->join("tb_produk", "tb_produk.id = tb_produksi.id_produk", 'inner')->where('tb_produk.id', $id)->get()->getResultArray();
         // *End pake yg ini ya*
-        
+
         return $this->builder->where('id', $id)->get()->getResultArray();
     }
-    
+
     /**
      * Mengambil data produk yang terenkripsi berdasarkan kode
      * @param string $kode - Kode enkripsi produk
      * @return array - Data produk yang sudah didekripsi
      */
-    function getDataDecrypted($kode){
+    function getDataDecrypted($kode)
+    {
         // Mencari data batch produksi berdasarkan kode
         $data = $this->builder_batch->where(["kode" => $kode])->get()->getResultArray();
-        
+
         // Mengambil informasi penting dari data batch
         $id_produk = $data[0]['id_produk'];
         $tgl_produksi = $data[0]['tgl_produksi'];
         $tgl_expire = $data[0]['tgl_expire'];
-        
+
         // Mengambil data produk dengan join ke tabel batch produksi
         return $this->builder_batch->join("tb_produk", "tb_produk.id = tb_produksi.id_produk", 'inner')
             ->where([
-                'tb_produk.id' =>$id_produk, 
-                "tb_produksi.tgl_produksi" => $tgl_produksi, 
+                'tb_produk.id' => $id_produk,
+                "tb_produksi.tgl_produksi" => $tgl_produksi,
                 "tb_produksi.tgl_expire" => $tgl_expire
             ])
             ->get()

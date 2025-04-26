@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,32 +22,36 @@
             background-color: #60B5FF;
             font-family: 'Poppins', sans-serif;
         }
+
         .login-container {
             background: white;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         .btn-custom {
             background: #EFAA41;
             color: white;
             font-weight: bold;
         }
+
         .btn-custom:hover {
-            background:rgb(255, 153, 0);
+            background: rgb(255, 153, 0);
             color: white;
         }
     </style>
 </head>
+
 <body class="d-flex align-items-center justify-content-center" style="height: 100vh;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5 login-container text-center">
                 <img src="<?= base_url('asset/img/logo_ensa_seroja.png') ?>" alt="Logo Ensa Seroja" width="200">
                 <h4 class="mb-4"><b>Login Ensa Seroja</b></h4>
-                <?php if(session()->get("warning")){ ?>
+                <?php if (session()->get("warning")) { ?>
                     <div class="alert alert-warning">Username atau Password salah!</div>
-                <?php } else if(session()->get("err")){ ?>
+                <?php } else if (session()->get("err")) { ?>
                     <div class="alert alert-danger">Harap isi data yang ada!</div>
                 <?php } ?>
                 <form action="<?= base_url('login') ?>" method="post">
@@ -67,4 +72,5 @@
     <script src="<?= base_url("asset/vendor/jquery/jquery.min.js") ?>"></script>
     <script src="<?= base_url("asset/vendor/bootstrap/js/bootstrap.bundle.min.js") ?>"></script>
 </body>
+
 </html>

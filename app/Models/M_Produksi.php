@@ -4,18 +4,19 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class M_Produksi extends Model{
+class M_Produksi extends Model
+{
     // Nama tabel utama untuk data produksi
-    protected $table='tb_produksi';
+    protected $table = 'tb_produksi';
     // Nama tabel produk yang terkait
     protected $table_produk = "tb_produk";
 
     // Konstruktor untuk inisialisasi koneksi database
     public function __construct() //memanggil koneksi
     {
-       $this->db = db_connect(); // Membuat koneksi ke database
-       $this->builder=$this->db->table($this->table); // Query builder untuk tabel produksi
-       $this->builder_produk=$this->db->table($this->table_produk); // Query builder untuk tabel produk
+        $this->db = db_connect(); // Membuat koneksi ke database
+        $this->builder = $this->db->table($this->table); // Query builder untuk tabel produksi
+        $this->builder_produk = $this->db->table($this->table_produk); // Query builder untuk tabel produk
     }
 
     /**
@@ -45,9 +46,8 @@ class M_Produksi extends Model{
      */
     public function tambah($data)
     {
-       return $this->builder->insert($data);
-        if($success)
-        {
+        return $this->builder->insert($data);
+        if ($success) {
             return redirect()->to(base_url('batch'));
         }
     }
@@ -59,7 +59,7 @@ class M_Produksi extends Model{
      */
     public function hapus($id)
     {
-       return $this->builder->delete(['id' => $id]);
+        return $this->builder->delete(['id' => $id]);
     }
 
     /**
@@ -70,7 +70,7 @@ class M_Produksi extends Model{
      */
     public function ubah($data, $id)
     {
-        return $this->builder->update($data,['id'=>$id]);
+        return $this->builder->update($data, ['id' => $id]);
     }
 
     /**
@@ -80,7 +80,8 @@ class M_Produksi extends Model{
      * @param string $tgl_expire - Tanggal expire baru
      * @return bool - True jika berhasil, false jika gagal
      */
-    public function updateTgl($id, $tgl_produksi, $tgl_expire){
+    public function updateTgl($id, $tgl_produksi, $tgl_expire)
+    {
         return $this->builder_produk->update(['tgl_produksi' => $tgl_produksi, 'tgl_expire' => $tgl_expire], ['id' => $id]);
     }
 
@@ -88,7 +89,8 @@ class M_Produksi extends Model{
      * Mengambil data dengan join antara tabel produk dan produksi
      * @return object - Hasil query join antara tabel produk dan produksi
      */
-    function getAllJoinTable(){
+    function getAllJoinTable()
+    {
         return $this->builder_produk->join("tb_produksi", "tb_produksi.id_produk = tb_produk.id")->get();
     }
 }

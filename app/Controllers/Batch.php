@@ -17,7 +17,7 @@ class Batch extends Controller
             // Jika tidak ada, redirect ke halaman login (base URL)
             return redirect()->to(base_url(""));
         }
-        
+
         // Inisialisasi model M_Produksi
         $this->models = new M_Produksi;
         // Inisialisasi model M_Produk
@@ -130,12 +130,12 @@ class Batch extends Controller
                 $produk = $this->product->getDataById($idProduk);
                 $tglProduksi = date('ymd', strtotime($this->request->getPost("tgl_produksi")));
 
-                 // Get the last sequence number for this product and date
-                 $lastBatch = $this->models->where('id_produk', $idProduk)
-                 ->where('DATE(tgl_produksi)', $this->request->getPost("tgl_produksi"))
-                 ->orderBy('kode', 'DESC')
-                 ->get()->getRowArray();
-                
+                // Get the last sequence number for this product and date
+                $lastBatch = $this->models->where('id_produk', $idProduk)
+                    ->where('DATE(tgl_produksi)', $this->request->getPost("tgl_produksi"))
+                    ->orderBy('kode', 'DESC')
+                    ->get()->getRowArray();
+
                 // Set starting sequence number
                 $startSeq = 1;
                 if ($lastBatch) {
@@ -144,7 +144,7 @@ class Batch extends Controller
                     $startSeq = $lastSeq + 1;
                 }
 
-                for($i=0; $i < intval($this->request->getPost('jml_produksi')); $i++){
+                for ($i = 0; $i < intval($this->request->getPost('jml_produksi')); $i++) {
                     $kode = $produk['kode_produk'] . $tglProduksi . sprintf('%03d', $startSeq + $i);
 
                     // Data yang akan disimpan ke database
@@ -154,7 +154,7 @@ class Batch extends Controller
                         'tgl_produksi' => $this->request->getPost("tgl_produksi"),
                         'tgl_expire' => $this->request->getPost("tgl_expire"),
                         'qrcode' => $initial_qr->make(rand(10, 10000000) . "_", $kode)
-                    ];       
+                    ];
 
                     // Menyimpan data ke database
                     $success = $this->models->tambah($data);
@@ -185,12 +185,12 @@ class Batch extends Controller
     {
         $produksi = $this->models->getDataById($id);
 
-        if($produksi){
+        if ($produksi) {
             unlink("QRcode/" . $produksi['qrcode']);
 
             $hapus = $this->models->hapus($id);
 
-            if($hapus){
+            if ($hapus) {
                 session()->setFlashdata('message', 'Dihapus'); // Pesan sukses
                 return redirect()->to(base_url('batch'));
             } else {
