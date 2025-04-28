@@ -165,12 +165,12 @@
                  </div>
                  <div class="modal-body">
                      <div class="form-group mb-0">
-                         Hapus data ini?
+                         Apakah anda yakin ingin menghapus?
                      </div>
                  </div>
                  <div class="modal-footer">
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                     <a href="<?= base_url('produk/hapus/' . $row['id']) ?>" name="hapus" class="btn btn-danger">Hapus Data</a>
+                     <a href="<?= base_url('produk/hapus/' . $row['id']) ?>" name="hapus" class="btn btn-danger">Ya, Hapus!</a>
                  </div>
              </div>
          </div>

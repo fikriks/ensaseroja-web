@@ -135,7 +135,7 @@ class Produk extends Controller
         $hapus = $this->models->hapus($id);
 
         if ($hapus) {
-            session()->setFlashdata('message', 'Dihapus');
+            session()->setFlashdata('message', 'Berhasil Dihapus');
         } else {
             session()->setFlashdata('err', 'Gagal Dihapus');
         }
