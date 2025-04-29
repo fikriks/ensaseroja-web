@@ -123,7 +123,7 @@ class Batch extends Controller
 
                 $idProduk = $this->request->getPost('idproduk');
                 $produk = $this->product->getDataById($idProduk);
-                $tglProduksi = date('ymd', strtotime($this->request->getPost("tgl_produksi")));
+                $tglProduksi = date('dmy', strtotime($this->request->getPost("tgl_produksi")));
 
                 // Get the last sequence number for this product and date
                 $lastBatch = $this->models->where('id_produk', $idProduk)
@@ -210,72 +210,72 @@ class Batch extends Controller
         $rules = $this->validate([
             'id' => [
                 'label' => "ID",
-                'rules' => "required", // Wajib diisi
+                'rules' => "required",
                 'errors' => [
                     'required' => "ID tidak valid"
                 ]
             ],
             'id_produk' => [
                 'label' => "ID produk",
-                'rules' => "required", // Wajib diisi
+                'rules' => "required",
                 'errors' => [
                     'required' => "ID produk tidak valid"
                 ]
             ],
             'kode' => [
                 'label' => "KODE",
-                'rules' => "required", // Wajib diisi
+                'rules' => "required",
                 'errors' => [
                     'required' => "KODE tidak valid"
                 ]
             ]
         ]);
 
-        // Jika validasi gagal, tampilkan pesan error
         if (!$rules) {
             session()->setFlashdata('err', \Config\Services::validation()->listErrors());
             return redirect()->to(base_url('batch'));
         } else {
-            // Inisialisasi library MakeQRcode
-            $initial_qr = new MakeQRcode();
             $id = $this->request->getPost('id');
+            // Ambil data batch lama
+            $batchLama = $this->models->getDataById($id);
 
-            // Jika QR code tidak diubah
-            if (!$this->request->getPost("qrcode")) {
-                $data = [
-                    'id_produk' => $this->request->getPost('id_produk'),
-                    'tgl_produksi' => $this->request->getPost("tgl_produksi"),
-                    'tgl_expire' => $this->request->getPost("tgl_expire"),
-                    'qrcode' => $initial_qr->make(rand(10, 1000000) . "_", $this->request->getPost('id_produk'), $this->request->getPost("tgl_produksi"), $this->request->getPost("tgl_expire"))
-                ];
-                // Update data
-                $success = $this->models->ubah($data, $id);
-                if ($success) {
-                    session()->setFlashdata('message', 'Diubah'); // Pesan sukses
-                    return redirect()->to(base_url('batch'));
-                } else {
-                    session()->setFlashdata('err', 'Gagal Diubah'); // Pesan error
-                    return redirect()->to(base_url('batch'));
-                }
+            // Hapus QR code lama jika ada
+            $qrPathLama = "QRcode/" . $batchLama['qrcode'];
+            if (is_file($qrPathLama)) {
+                unlink($qrPathLama);
+            }
+
+            // Ambil bagian kode produk dan urutan dari kode batch lama
+            $kodeProduk = substr($batchLama['kode'], 0, 3);
+            $urutan = substr($batchLama['kode'], -3);
+
+            // Ambil tanggal produksi baru dan format ddmmyy
+            $tglProduksiBaru = date('dmY', strtotime($this->request->getPost("tgl_produksi")));
+            $tglProduksiKode = date('dm', strtotime($this->request->getPost("tgl_produksi"))) . date('y', strtotime($this->request->getPost("tgl_produksi")));
+
+            // Susun kode batch baru dengan format tanggal-bulan-tahun
+            $kodeBatchBaru = $kodeProduk . $tglProduksiKode . $urutan;
+
+            // Buat QR code baru
+            $initial_qr = new MakeQRcode();
+            $qrBaru = $initial_qr->make(rand(10, 1000000) . "_", $kodeBatchBaru);
+
+            // Data yang akan diupdate
+            $data = [
+                'id_produk' => $this->request->getPost('id_produk'),
+                'tgl_produksi' => $this->request->getPost("tgl_produksi"),
+                'tgl_expire' => $this->request->getPost("tgl_expire"),
+                'kode' => $kodeBatchBaru,
+                'qrcode' => $qrBaru
+            ];
+
+            $success = $this->models->ubah($data, $id);
+            if ($success) {
+                session()->setFlashdata('message', 'Diubah');
+                return redirect()->to(base_url('batch'));
             } else {
-                // Jika QR code diubah, hapus file QR code lama
-                $image = $this->request->getPost("qrcode");
-                unlink(FCPATH . "QRcode/" . $image);
-                $data = [
-                    'id_produk' => $this->request->getPost('idproduk'),
-                    'tgl_produksi' => $this->request->getPost("tgl_produksi"),
-                    'tgl_expire' => $this->request->getPost("tgl_expire"),
-                    'qrcode' => $initial_qr->make(rand(10, 1000000) . "_", $this->request->getPost('id_produk'), $this->request->getPost("tgl_produksi"), $this->request->getPost("tgl_expire"))
-                ];
-                // Update data
-                $success = $this->models->ubah($data, $id);
-                if ($success) {
-                    session()->setFlashdata('message', 'Diubah'); // Pesan sukses
-                    return redirect()->to(base_url('batch'));
-                } else {
-                    session()->setFlashdata('err', 'Gagal Diubah'); // Pesan error
-                    return redirect()->to(base_url('batch'));
-                }
+                session()->setFlashdata('err', 'Gagal Diubah');
+                return redirect()->to(base_url('batch'));
             }
         }
     }
