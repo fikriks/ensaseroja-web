@@ -145,6 +145,7 @@ class Batch extends Controller
                     // Data yang akan disimpan ke database
                     $data = [
                         'kode' => $kode,
+                        'kode_enkripsi' => $initial_qr->encrypt($kode),
                         'id_produk' => $this->request->getPost('idproduk'),
                         'tgl_produksi' => $this->request->getPost("tgl_produksi"),
                         'tgl_expire' => $this->request->getPost("tgl_expire"),
@@ -266,6 +267,7 @@ class Batch extends Controller
                 'tgl_produksi' => $this->request->getPost("tgl_produksi"),
                 'tgl_expire' => $this->request->getPost("tgl_expire"),
                 'kode' => $kodeBatchBaru,
+                'kode_enkripsi' => $initial_qr->encrypt($kodeBatchBaru),
                 'qrcode' => $qrBaru
             ];
 
