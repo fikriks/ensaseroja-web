@@ -10,7 +10,7 @@ class C_API extends Controller
 {
     public function __construct()
     {
-    	$this->models = new M_Produk;
+        $this->models = new M_Produk;
     }
 
     /**
@@ -18,23 +18,33 @@ class C_API extends Controller
      *
      * @return mixed
      */
-    public function index(){
+    public function index()
+    {
 
         $id = esc($this->request->getVar("enc"));
+
+        // Validate only hexadecimal and even length
+        if (!ctype_xdigit($id) || strlen($id) % 2 !== 0) {
+            $res = [
+                "code" => 400,
+                "message" => "Kode QR Tidak Valid"
+            ];
+            return $this->response->setJSON($res);
+        }
 
         $_init = new MakeQRcode();
 
         $decrypted = $_init->decrypt($id);
 
         $data =  $this->models->getDataDecrypted($decrypted);
-        
-        if($data != null){
+
+        if ($data != null) {
             $res = [
                 "code" => 200,
                 "message" => "Data Original",
                 "data" => $data
             ];
-        }else{
+        } else {
             $res = [
                 "code" => 200,
                 "message" => "Data Tidak Original",
