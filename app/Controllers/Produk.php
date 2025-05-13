@@ -213,8 +213,8 @@ class Produk extends Controller
                 $id = $this->request->getPost('id'); // Ambil ID produk
                 $avatar = $this->request->getFile('file'); // Ambil file foto dari form
 
-                // Jika ada file baru yang diunggah
-                if ($avatar->getName() != "") {
+                // Jika ada file baru yang diunggah dan file tersebut valid
+                if ($avatar->isValid() && !$avatar->hasMoved()) {
                     $newName = $avatar->getRandomName(); // Generate nama file acak
                     $avatar->move(ROOTPATH . "public/foto_product", $newName); // Pindahkan file ke folder tujuan
 

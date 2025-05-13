@@ -191,7 +191,7 @@
                  </div>
                  <div class="modal-body">
                      <form action="<?= base_url('produk/ubah') ?>" method="post" enctype="multipart/form-data">
-                         <input type="hidden" name="id" id="id-produk">
+                         <input type="hidden" name="id" id="id-produk" value="<?= $row['id'] ?>">
                          <div class="form-group mb-0">
                              <label for="kode">Kode Produk <span class="text-danger">*</span></label>
                              <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode produk" value="<?= $row['kode_produk'] ?>">
@@ -199,6 +199,9 @@
                              <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['nama'] ?>">
                              <!--<label for="nama">Foto Produk</label>-->
                              <!--<input type="file" name="file" id="file" class="form-control" placeholder="Masukkan Foto produk" value="<?= base_url('foto_product/' . $row['foto']) ?>">-->
+                             <br>
+                             <img src="<?= base_url('foto_product/' . $row['foto']) ?>" alt="Foto Produk <?= $row['nama'] ?>" width="200">
+                             <br>
                              <label for="photoProduk">Foto Produk</label>
                              <br>
                              <label class="form-input-file">
@@ -206,6 +209,9 @@
                                  <span>Pilih Foto Produk</span>
                              </label>
                              <br>
+                             <span class="text-muted">Kosongkan jika foto produk tidak ingin diubah</span>
+                             <br />
+                             <br />
                              <label for="komposisi">Komposisi <span class="text-danger">*</span></label>
                              <input type="text" name="komposisi" id="komposisi" class="form-control" placeholder="Masukkan khasiat produk" value="<?= $row['komposisi'] ?>">
                              <label for="No_PIR-T">No PIR-T <span class="text-danger">*</span></label>
