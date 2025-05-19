@@ -103,13 +103,6 @@ class Batch extends Controller
                     'errors' => [
                         'required' => "Tanggal Expire Tidak Boleh Kosong"
                     ]
-                ],
-                'jml_produksi' => [
-                    'label' => "Jumlah produksi Tidak Boleh Kosong",
-                    'rules' => "required", // Wajib diisi
-                    'errors' => [
-                        'required' => "Jumlah produksi Tidak Boleh Kosong"
-                    ]
                 ]
             ]);
 
@@ -123,7 +116,18 @@ class Batch extends Controller
 
                 $idProduk = $this->request->getPost('idproduk');
                 $produk = $this->product->getDataById($idProduk);
-                $tglProduksi = date('dmy', strtotime($this->request->getPost("tgl_produksi")));
+                $tglProduksi = date('dmY', strtotime($this->request->getPost("tgl_produksi")));
+
+                // Cek apakah kode produksi dan tanggal produksi sudah ada
+                $existingBatch = $this->models->where('id_produk', $idProduk)
+                    ->where('DATE(tgl_produksi)', $this->request->getPost("tgl_produksi"))
+                    ->where('kode', $produk['kode_produk'] . $tglProduksi)
+                    ->get()->getRowArray();
+
+                if ($existingBatch) {
+                    session()->setFlashdata('err', 'Kode produksi sudah ditambahkan');
+                    return redirect()->to(base_url('batch'));
+                }
 
                 // Get the last sequence number for this product and date
                 $lastBatch = $this->models->where('id_produk', $idProduk)
@@ -139,22 +143,20 @@ class Batch extends Controller
                     $startSeq = $lastSeq + 1;
                 }
 
-                for ($i = 0; $i < intval($this->request->getPost('jml_produksi')); $i++) {
-                    $kode = $produk['kode_produk'] . $tglProduksi . sprintf('%03d', $startSeq + $i);
+                $kode = $produk['kode_produk'] . $tglProduksi;
 
-                    // Data yang akan disimpan ke database
-                    $data = [
-                        'kode' => $kode,
-                        'kode_enkripsi' => $initial_qr->encrypt($kode),
-                        'id_produk' => $this->request->getPost('idproduk'),
-                        'tgl_produksi' => $this->request->getPost("tgl_produksi"),
-                        'tgl_expire' => $this->request->getPost("tgl_expire"),
-                        'qrcode' => $initial_qr->make(rand(10, 10000000) . "_", $kode)
-                    ];
+                // Data yang akan disimpan ke database
+                $data = [
+                    'kode' => $kode,
+                    'kode_enkripsi' => $initial_qr->encrypt($kode),
+                    'id_produk' => $this->request->getPost('idproduk'),
+                    'tgl_produksi' => $this->request->getPost("tgl_produksi"),
+                    'tgl_expire' => $this->request->getPost("tgl_expire"),
+                    'qrcode' => $initial_qr->make(rand(10, 10000000) . "_", $kode)
+                ];
 
-                    // Menyimpan data ke database
-                    $success = $this->models->tambah($data);
-                }
+                // Menyimpan data ke database
+                $success = $this->models->tambah($data);
 
                 if ($success) {
                     session()->setFlashdata('message', 'Ditambahkan'); // Pesan sukses
@@ -252,10 +254,10 @@ class Batch extends Controller
 
             // Ambil tanggal produksi baru dan format ddmmyy
             $tglProduksiBaru = date('dmY', strtotime($this->request->getPost("tgl_produksi")));
-            $tglProduksiKode = date('dm', strtotime($this->request->getPost("tgl_produksi"))) . date('y', strtotime($this->request->getPost("tgl_produksi")));
+            $tglProduksiKode = date('dmY', strtotime($this->request->getPost("tgl_produksi")));
 
             // Susun kode batch baru dengan format tanggal-bulan-tahun
-            $kodeBatchBaru = $kodeProduk . $tglProduksiKode . $urutan;
+            $kodeBatchBaru = $kodeProduk . $tglProduksiKode;
 
             // Buat QR code baru
             $initial_qr = new MakeQRcode();

@@ -153,8 +153,6 @@
                      <div class="modal-body">
                          <form action="<?= base_url('batch/tambah') ?>" method="post">
                              <div class="form-group mb-0">
-                                 <label for="jml_produksi">Jumlah Produksi <span class="text-danger">*</span></label>
-                                 <input type="number" name="jml_produksi" id="jml_produksi" class="form-control" placeholder="Jumlah produksi">
                                  <label for="nama">Produk <span class="text-danger">*</span></label>
                                  <select class="custom-select" id="inputGroupSelect02" name="idproduk">
                                      <option selected disabled>Pilih</option>
