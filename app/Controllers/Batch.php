@@ -116,7 +116,7 @@ class Batch extends Controller
 
                 $idProduk = $this->request->getPost('idproduk');
                 $produk = $this->product->getDataById($idProduk);
-                $tglProduksi = date('dmY', strtotime($this->request->getPost("tgl_produksi")));
+                $tglProduksi = date('dmy', strtotime($this->request->getPost("tgl_produksi")));
 
                 // Cek apakah kode produksi dan tanggal produksi sudah ada
                 $existingBatch = $this->models->where('id_produk', $idProduk)
@@ -254,7 +254,7 @@ class Batch extends Controller
 
             // Ambil tanggal produksi baru dan format ddmmyy
             $tglProduksiBaru = date('dmY', strtotime($this->request->getPost("tgl_produksi")));
-            $tglProduksiKode = date('dmY', strtotime($this->request->getPost("tgl_produksi")));
+            $tglProduksiKode = date('dmy', strtotime($this->request->getPost("tgl_produksi")));
 
             // Susun kode batch baru dengan format tanggal-bulan-tahun
             $kodeBatchBaru = $kodeProduk . $tglProduksiKode;
