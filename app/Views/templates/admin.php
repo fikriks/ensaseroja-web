@@ -75,7 +75,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('batch') ?>">
                     <i class="fas fa-barcode" style="color: #EFAA41;"></i>
-                    <span>Data Kode Produksi</span>
+                    <span>Data Produksi</span>
                 </a>
             </li>
 
