@@ -72,8 +72,8 @@ Data Kode Produksi
                                 <td class="align-middle"><?= $row['tgl_expire'] ?></td>
                                 <td class="align-middle"><a href="<?= base_url('QRcode/') . $row['qrcode'] ?>" download><img src="<?= base_url('QRcode/') . $row['qrcode'] ?>" alt=""></a></td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdate<?= $key; ?>" id="btn-edit-batch" data-id="<?= $row['id'] ?>" data-kodebatch="<?= $row['kode'] ?>" data-idproduk="<?= $row['id_produk'] ?>">
-                                        <i class="fa fa-edit"></i></button>
+                                    <!-- <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdate<?= $key; ?>" id="btn-edit-batch" data-id="<?= $row['id'] ?>" data-kodebatch="<?= $row['kode'] ?>" data-idproduk="<?= $row['id_produk'] ?>">
+                                        <i class="fa fa-edit"></i></button> -->
                                     <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalHapus<?= $key ?>">
                                         <i class="fa fa-trash-alt"></i>
                                     </button>
@@ -96,9 +96,9 @@ Data Kode Produksi
                                                     <label for="kode">Kode Produksi</label>
                                                     <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi" value="<?= $row['kode'] ?>" readonly>
                                                     <label for="tgl_produksi">Tanggal Produksi</label>
-                                                    <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control" value="<?= $row['tgl_produksi'] ?>">
+                                                    <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control" value="<?= $row['tgl_produksi'] ?>" readonly>
                                                     <label for="tgl_expire">Tanggal Expire</label>
-                                                    <input type="date" name="tgl_expire" id="tgl_expire_edit" class="form-control" value="<?= $row['tgl_expire'] ?>">
+                                                    <input type="date" name="tgl_expire" id="tgl_expire_edit" class="form-control" value="<?= $row['tgl_expire'] ?>" readonly>
                                                     <!-- <label for="nama">QRCode</label> -->
                                                     <input type="hidden" name="qrcode" id="qrcode" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['qrcode'] ?>">
                                                 </div>
@@ -164,9 +164,9 @@ Data Kode Produksi
                                 </select>
                                 <div id="dataDummy"></div>
                                 <label for="tgl_produksi">Tanggal Produksi <span class="text-danger">*</span></label>
-                                <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control" value="<?= date('Y-m-d') ?>">
+                                <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
                                 <label for="tgl_expire">Tanggal Expire <span class="text-danger">*</span></label>
-                                <input type="date" name="tgl_expire" id="tgl_expire" class="form-control">
+                                <input type="date" name="tgl_expire" id="tgl_expire" class="form-control" readonly>
                             </div>
                     </div>
                     <div class="modal-footer">
