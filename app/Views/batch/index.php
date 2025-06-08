@@ -194,7 +194,7 @@ Data Kode Produksi
         let produksi = $('#tgl_produksi').val();
         if (produksi) {
             let produksiDate = new Date(produksi);
-            produksiDate.setMonth(produksiDate.getMonth() + 3);
+            produksiDate.setMonth(produksiDate.getMonth() + 6);
 
             // Handle jika bulan lebih dari Desember
             let year = produksiDate.getFullYear();
