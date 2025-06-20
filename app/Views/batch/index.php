@@ -72,8 +72,8 @@ Data Kode Produksi
                                 <td class="align-middle"><?= $row['tgl_expire'] ?></td>
                                 <td class="align-middle"><a href="<?= base_url('QRcode/') . $row['qrcode'] ?>" download><img src="<?= base_url('QRcode/') . $row['qrcode'] ?>" alt=""></a></td>
                                 <td>
-                                    <!-- <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdate<?= $key; ?>" id="btn-edit-batch" data-id="<?= $row['id'] ?>" data-kodebatch="<?= $row['kode'] ?>" data-idproduk="<?= $row['id_produk'] ?>">
-                                        <i class="fa fa-edit"></i></button> -->
+                                    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdate<?= $key; ?>" id="btn-edit-batch" data-id="<?= $row['id'] ?>" data-kodebatch="<?= $row['kode'] ?>" data-idproduk="<?= $row['id_produk'] ?>">
+                                        <i class="fa fa-edit"></i></button>
                                     <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalHapus<?= $key ?>">
                                         <i class="fa fa-trash-alt"></i>
                                     </button>
@@ -164,7 +164,7 @@ Data Kode Produksi
                                 </select>
                                 <div id="dataDummy"></div>
                                 <label for="tgl_produksi">Tanggal Produksi <span class="text-danger">*</span></label>
-                                <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
+                                <input type="date" name="tgl_produksi" id="tgl_produksi" class="form-control" value="<?= date('Y-m-d') ?>">
                                 <label for="tgl_expire">Tanggal Expire <span class="text-danger">*</span></label>
                                 <input type="date" name="tgl_expire" id="tgl_expire" class="form-control" readonly>
                             </div>
