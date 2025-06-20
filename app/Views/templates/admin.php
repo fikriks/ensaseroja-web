@@ -82,6 +82,13 @@
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt" style="color: #EFAA41;"></i>
+                    <span>Keluar</span>
+                </a>
+            </li>
+
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
