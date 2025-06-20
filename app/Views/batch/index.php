@@ -96,9 +96,9 @@ Data Kode Produksi
                                                     <label for="kode">Kode Produksi</label>
                                                     <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi" value="<?= $row['kode'] ?>" readonly>
                                                     <label for="tgl_produksi">Tanggal Produksi</label>
-                                                    <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control" value="<?= $row['tgl_produksi'] ?>" readonly>
+                                                    <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control tgl_produksi_edit" value="<?= $row['tgl_produksi'] ?>">
                                                     <label for="tgl_expire">Tanggal Expire</label>
-                                                    <input type="date" name="tgl_expire" id="tgl_expire_edit" class="form-control" value="<?= $row['tgl_expire'] ?>" readonly>
+                                                    <input type="date" name="tgl_expire" id="tgl_expire_edit" class="form-control tgl_expire_edit" value="<?= $row['tgl_expire'] ?>" readonly>
                                                     <!-- <label for="nama">QRCode</label> -->
                                                     <input type="hidden" name="qrcode" id="qrcode" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['qrcode'] ?>">
                                                 </div>
@@ -213,6 +213,20 @@ Data Kode Produksi
     $('#tgl_produksi').on('change', function() {
         setExpireDate();
         updateKodeProduksi();
+    });
+
+    $('.modal').on('change', '.tgl_produksi_edit', function() {
+        let $modal = $(this).closest('.modal');
+        let produksi = $(this).val();
+        if (produksi) {
+            let produksiDate = new Date(produksi);
+            produksiDate.setMonth(produksiDate.getMonth() + 6);
+            let year = produksiDate.getFullYear();
+            let month = (produksiDate.getMonth() + 1).toString().padStart(2, '0');
+            let day = produksiDate.getDate().toString().padStart(2, '0');
+            let expireFormatted = `${year}-${month}-${day}`;
+            $modal.find('.tgl_expire_edit').val(expireFormatted);
+        }
     });
 
     // Saat produk diubah
