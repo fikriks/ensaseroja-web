@@ -72,6 +72,8 @@ Data Kode Produksi
                                 <td class="align-middle"><?= $row['tgl_expire'] ?></td>
                                 <td class="align-middle"><a href="<?= base_url('QRcode/') . $row['qrcode'] ?>" download><img src="<?= base_url('QRcode/') . $row['qrcode'] ?>" alt=""></a></td>
                                 <td>
+                                    <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalShow<?= $key; ?>" id="btn-show-batch" data-id="<?= $row['id'] ?>" data-kodebatch="<?= $row['kode'] ?>" data-idproduk="<?= $row['id_produk'] ?>">
+                                        <i class="fa fa-eye"></i></button>
                                     <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdate<?= $key; ?>" id="btn-edit-batch" data-id="<?= $row['id'] ?>" data-kodebatch="<?= $row['kode'] ?>" data-idproduk="<?= $row['id_produk'] ?>">
                                         <i class="fa fa-edit"></i></button>
                                     <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalHapus<?= $key ?>">
@@ -106,6 +108,37 @@ Data Kode Produksi
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <button type="submit" name="ubah" class="btn btn-primary">Update Data</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="modalShow<?= $key; ?>">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Detail Produksi</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="refresh()">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="form-group mb-0">
+                                                    <label for="kode">Kode Produksi</label>
+                                                    <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi" value="<?= $row['kode'] ?>" readonly>
+                                                    <label for="tgl_produksi">Tanggal Produksi</label>
+                                                    <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control tgl_produksi_edit" value="<?= (new \App\Libraries\MakeQRcode())->decrypt($row['tgl_produksi']) ?>" readonly>
+                                                    <label for="tgl_expire">Tanggal Expire</label>
+                                                    <input type="date" name="tgl_expire" id="tgl_expire_edit" class="form-control tgl_expire_edit" value="<?= (new \App\Libraries\MakeQRcode())->decrypt($row['tgl_expire']) ?>" readonly>
+                                                    <label for="nama" class="mt-2">QRCode</label>
+                                                    <br>
+                                                    <img src="<?= base_url('QRcode/') . $row['qrcode'] ?>" alt="QRCode" width="200">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             </form>
                                         </div>
                                     </div>
