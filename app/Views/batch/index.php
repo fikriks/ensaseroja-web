@@ -128,6 +128,8 @@ Data Kode Produksi
                                                 <div class="form-group mb-0">
                                                     <label for="kode">Kode Produksi</label>
                                                     <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi" value="<?= $row['kode'] ?>" readonly>
+                                                    <label for="kode">Kode Produksi Terenkripsi</label>
+                                                    <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi" value="<?= $row['kode_enkripsi'] ?>" readonly>
                                                     <label for="tgl_produksi">Tanggal Produksi</label>
                                                     <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control tgl_produksi_edit" value="<?= (new \App\Libraries\MakeQRcode())->decrypt($row['tgl_produksi']) ?>" readonly>
                                                     <label for="tgl_expire">Tanggal Expire</label>
