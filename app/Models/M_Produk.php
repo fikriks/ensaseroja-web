@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Libraries\MakeQRcode;
 
 class M_Produk extends Model
 {
@@ -95,18 +96,22 @@ class M_Produk extends Model
         $data = $this->builder_batch->where(["kode" => $kode])->get()->getResultArray();
 
         // Mengambil informasi penting dari data batch
-        $id_produk = $data[0]['id_produk'];
-        $tgl_produksi = $data[0]['tgl_produksi'];
-        $tgl_expire = $data[0]['tgl_expire'];
+        if ($data != null) {
+            $id_produk = $data[0]['id_produk'];
+            $tgl_produksi = $data[0]['tgl_produksi'];
+            $tgl_expire = $data[0]['tgl_expire'];
 
-        // Mengambil data produk dengan join ke tabel batch produksi
-        return $this->builder_batch->join("tb_produk", "tb_produk.id = tb_produksi.id_produk", 'inner')
-            ->where([
-                'tb_produk.id' => $id_produk,
-                "tb_produksi.tgl_produksi" => $tgl_produksi,
-                "tb_produksi.tgl_expire" => $tgl_expire
-            ])
-            ->get()
-            ->getResultArray();
+            // Mengambil data produk dengan join ke tabel batch produksi
+            return $this->builder_batch->join("tb_produk", "tb_produk.id = tb_produksi.id_produk", 'inner')
+                ->where([
+                    'tb_produk.id' => $id_produk,
+                    "tb_produksi.tgl_produksi" => $tgl_produksi,
+                    "tb_produksi.tgl_expire" => $tgl_expire
+                ])
+                ->get()
+                ->getResultArray();
+        }
+
+        return null;
     }
 }

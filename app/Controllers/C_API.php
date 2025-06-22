@@ -39,6 +39,11 @@ class C_API extends Controller
         $data =  $this->models->getDataDecrypted($decrypted);
 
         if ($data != null) {
+            $tglProduksi = $data[0]['tgl_produksi'];
+            $tglExpire = $data[0]['tgl_expire'];
+            $data[0]['tgl_produksi'] = $_init->decrypt($tglProduksi);
+            $data[0]['tgl_expire'] = $_init->decrypt($tglExpire);
+
             $res = [
                 "code" => 200,
                 "message" => "Data Original",

@@ -96,9 +96,9 @@ Data Kode Produksi
                                                     <label for="kode">Kode Produksi</label>
                                                     <input type="text" name="kode" id="kode" class="form-control" placeholder="Masukkan kode Produksi" value="<?= $row['kode'] ?>" readonly>
                                                     <label for="tgl_produksi">Tanggal Produksi</label>
-                                                    <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control tgl_produksi_edit" value="<?= $row['tgl_produksi'] ?>">
+                                                    <input type="date" name="tgl_produksi" id="tgl_produksi_edit" class="form-control tgl_produksi_edit" value="<?= (new \App\Libraries\MakeQRcode())->decrypt($row['tgl_produksi']) ?>">
                                                     <label for="tgl_expire">Tanggal Expire</label>
-                                                    <input type="date" name="tgl_expire" id="tgl_expire_edit" class="form-control tgl_expire_edit" value="<?= $row['tgl_expire'] ?>" readonly>
+                                                    <input type="date" name="tgl_expire" id="tgl_expire_edit" class="form-control tgl_expire_edit" value="<?= (new \App\Libraries\MakeQRcode())->decrypt($row['tgl_expire']) ?>" readonly>
                                                     <!-- <label for="nama">QRCode</label> -->
                                                     <input type="hidden" name="qrcode" id="qrcode" class="form-control" placeholder="Masukkan nama produk" value="<?= $row['qrcode'] ?>">
                                                 </div>

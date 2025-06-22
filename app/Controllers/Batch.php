@@ -150,8 +150,8 @@ class Batch extends Controller
                     'kode' => $kode,
                     'kode_enkripsi' => $initial_qr->encrypt($kode),
                     'id_produk' => $this->request->getPost('idproduk'),
-                    'tgl_produksi' => $this->request->getPost("tgl_produksi"),
-                    'tgl_expire' => $this->request->getPost("tgl_expire"),
+                    'tgl_produksi' => $initial_qr->encrypt($this->request->getPost("tgl_produksi")),
+                    'tgl_expire' => $initial_qr->encrypt($this->request->getPost("tgl_expire")),
                     'qrcode' => $initial_qr->make(rand(10, 10000000) . "_", $kode)
                 ];
 
@@ -266,8 +266,8 @@ class Batch extends Controller
             // Data yang akan diupdate
             $data = [
                 'id_produk' => $this->request->getPost('id_produk'),
-                'tgl_produksi' => $this->request->getPost("tgl_produksi"),
-                'tgl_expire' => $this->request->getPost("tgl_expire"),
+                'tgl_produksi' => $initial_qr->encrypt($this->request->getPost("tgl_produksi")),
+                'tgl_expire' => $initial_qr->encrypt($this->request->getPost("tgl_expire")),
                 'kode' => $kodeBatchBaru,
                 'kode_enkripsi' => $initial_qr->encrypt($kodeBatchBaru),
                 'qrcode' => $qrBaru
