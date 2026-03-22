@@ -10,6 +10,7 @@
         "endroid/qr-code": "^4.8"
     },
     "require-dev": {
+        "kint-php/kint": "^6.0",
         "fakerphp/faker": "^1.23",
         "mikey179/vfsstream": "^1.6",
         "phpunit/phpunit": "^10.5"
