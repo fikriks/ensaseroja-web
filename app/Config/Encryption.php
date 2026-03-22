@@ -25,6 +25,18 @@ class Encryption extends BaseConfig
 
     /**
      * --------------------------------------------------------------------------
+     * Previous Keys
+     * --------------------------------------------------------------------------
+     *
+     * To rotatate your encryption keys, put the previous keys in this array.
+     * Newer keys should be at the top of the array.
+     *
+     * @var list<string>
+     */
+    public array $previousKeys = [];
+
+    /**
+     * --------------------------------------------------------------------------
      * Encryption Driver to Use
      * --------------------------------------------------------------------------
      *
